@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BrandingSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Delta Dental of California CPQ — Green brand theme</description>
+    <masterLabel>DD CPQ Branding</masterLabel>
+
+    <!-- ── Primary nav bar / header background ── -->
+    <brandingSetProperty>
+        <propertyName>BrandPrimaryColor</propertyName>
+        <propertyValue>#006B3C</propertyValue>
+    </brandingSetProperty>
+
+    <!-- ── Hover / active state on nav items ── -->
+    <brandingSetProperty>
+        <propertyName>BrandTertiaryColor</propertyName>
+        <propertyValue>#008A4B</propertyValue>
+    </brandingSetProperty>
+
+    <!-- ── Accent / badge / focus ring ── -->
+    <brandingSetProperty>
+        <propertyName>BrandQuaternaryColor</propertyName>
+        <propertyValue>#4CAF82</propertyValue>
+    </brandingSetProperty>
+
+    <!-- ── Page background ── -->
+    <brandingSetProperty>
+        <propertyName>BrandPageBackground</propertyName>
+        <propertyValue>#F0F7F4</propertyValue>
+    </brandingSetProperty>
+
+    <!-- ── Text on primary-colored backgrounds (keep white for contrast) ── -->
+    <brandingSetProperty>
+        <propertyName>ContrastInvertedColor</propertyName>
+        <propertyValue>#FFFFFF</propertyValue>
+    </brandingSetProperty>
+</BrandingSet>

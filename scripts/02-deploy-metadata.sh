@@ -265,6 +265,14 @@ sf project deploy start \
   --target-org "$TARGET" --wait 10
 
 # ─────────────────────────────────────────────────────────────────────────────
+step 15 "Lightning Experience Theme (Delta Dental Green)"
+# ─────────────────────────────────────────────────────────────────────────────
+sf project deploy start \
+  --metadata BrandingSet:DD_CPQ_BrandingSet \
+  --metadata LightningExperienceTheme:DD_CPQ_Theme \
+  --target-org "$TARGET" --wait 10
+
+# ─────────────────────────────────────────────────────────────────────────────
 echo ""
 echo "======================================================"
 echo -e "${GREEN} Deployment complete!${NC}"
@@ -273,6 +281,7 @@ echo ""
 echo "Next steps:"
 echo "  1. Load sample data:     ./scripts/03-load-sample-data.sh $TARGET"
 echo "  2. Assign permissions:   ./scripts/04-assign-permissions.sh $TARGET"
-echo "  3. Activate daily flow:  Setup → Flows → DD_Contract_DailyStatusCheck → Activate"
+echo "  3. Activate theme:       Setup → Themes and Branding → DD CPQ Theme → Activate"
+echo "  4. Activate daily flow:  Setup → Flows → DD_Contract_DailyStatusCheck → Activate"
 echo "  4. Open org:             sf org open --target-org $TARGET"
 echo ""
