@@ -1,0 +1,214 @@
+<template>
+    <div class="ddps-container">
+
+        <!-- Filters Bar -->
+        <div class="ddps-filters">
+            <div class="ddps-filter-group">
+                <label class="ddps-filter-label">Product</label>
+                <div class="ddps-toggle-group">
+                    <button class={dentalToggleClass} data-val="Dental" onclick={handleProductFilter}>Dental</button>
+                    <button class={visionToggleClass} data-val="Vision" onclick={handleProductFilter}>Vision</button>
+                    <button class={allToggleClass} data-val="All" onclick={handleProductFilter}>All</button>
+                </div>
+            </div>
+            <div class="ddps-filter-group">
+                <label class="ddps-filter-label">Compare</label>
+                <span class="ddps-compare-count">{selectedCount} of 3 selected</span>
+                <template if:true={hasComparisons}>
+                    <button class="ddps-compare-btn" onclick={handleCompare}>Compare Plans</button>
+                </template>
+            </div>
+            <div class="ddps-filter-group ddps-search-group">
+                <input type="text"
+                       class="ddps-search"
+                       placeholder="Search plans..."
+                       value={searchTerm}
+                       onchange={handleSearch} />
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <template if:true={isLoading}>
+            <div class="ddps-loading">
+                <lightning-spinner size="medium" alternative-text="Loading plans..."></lightning-spinner>
+                <p>Loading available plans...</p>
+            </div>
+        </template>
+
+        <!-- Plan Grid -->
+        <template if:false={isLoading}>
+            <template if:true={hasPlans}>
+                <div class="ddps-grid">
+                    <template for:each={filteredPlans} for:item="plan">
+                        <div key={plan.planId} class={plan.cardClass}>
+
+                            <!-- Compare Checkbox -->
+                            <div class="ddps-compare-check">
+                                <input type="checkbox"
+                                       id={plan.planId}
+                                       checked={plan.compareSelected}
+                                       data-plan-id={plan.planId}
+                                       onchange={handleCompareToggle} />
+                                <label for={plan.planId}>Compare</label>
+                            </div>
+
+                            <!-- Plan Header -->
+                            <div class="ddps-plan-header">
+                                <div class="ddps-network-badge">{plan.network}</div>
+                                <h3 class="ddps-plan-name">{plan.planName}</h3>
+                                <div class="ddps-plan-code">{plan.planCode}</div>
+                                <template if:true={plan.selected}>
+                                    <div class="ddps-selected-ribbon">&#10003; Selected</div>
+                                </template>
+                            </div>
+
+                            <!-- Benefit Highlights -->
+                            <div class="ddps-plan-body">
+                                <div class="ddps-highlight-grid">
+                                    <div class="ddps-highlight">
+                                        <div class="ddps-highlight-val">{plan.coinsurancePreventive}%</div>
+                                        <div class="ddps-highlight-lbl">Preventive</div>
+                                    </div>
+                                    <div class="ddps-highlight">
+                                        <div class="ddps-highlight-val">{plan.coinsuranceBasic}%</div>
+                                        <div class="ddps-highlight-lbl">Basic</div>
+                                    </div>
+                                    <div class="ddps-highlight">
+                                        <div class="ddps-highlight-val">{plan.coinsuranceMajor}%</div>
+                                        <div class="ddps-highlight-lbl">Major</div>
+                                    </div>
+                                </div>
+
+                                <div class="ddps-detail-list">
+                                    <div class="ddps-detail-row">
+                                        <span>Deductible</span>
+                                        <span>${plan.deductibleIndividual} / ${plan.deductibleFamily} fam</span>
+                                    </div>
+                                    <div class="ddps-detail-row">
+                                        <span>Annual Maximum</span>
+                                        <span>{plan.annualMaxDisplay}</span>
+                                    </div>
+                                    <div class="ddps-detail-row">
+                                        <span>Waiting Period</span>
+                                        <span>{plan.waitingPeriod}</span>
+                                    </div>
+                                    <div class="ddps-detail-row">
+                                        <span>Orthodontia</span>
+                                        <span>
+                                            <template if:true={plan.orthoLCovered}>&#9989; Covered</template>
+                                            <template if:false={plan.orthoLCovered}>&#10060; Not Covered</template>
+                                        </span>
+                                    </div>
+                                    <template if:true={plan.rate}>
+                                        <div class="ddps-detail-row ddps-rate-row">
+                                            <span>EO Monthly Rate</span>
+                                            <span class="ddps-rate-val">${plan.rate.rateEO}/mo</span>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="ddps-plan-footer">
+                                <button class="ddps-btn-outline"
+                                        data-plan-id={plan.planId}
+                                        onclick={handleViewBenefits}>
+                                    View Benefits
+                                </button>
+                                <button class={plan.selectBtnClass}
+                                        data-plan-id={plan.planId}
+                                        onclick={handleSelectPlan}>
+                                    {plan.selectBtnLabel}
+                                </button>
+                            </div>
+
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <template if:false={hasPlans}>
+                <div class="ddps-empty">
+                    <p>No plans available matching your criteria.</p>
+                </div>
+            </template>
+        </template>
+
+        <!-- Benefits Detail Modal -->
+        <template if:true={showBenefitsModal}>
+            <div class="ddps-modal-overlay" onclick={closeBenefitsModal}>
+                <div class="ddps-modal" onclick={stopProp}>
+                    <div class="ddps-modal-header">
+                        <div>
+                            <h2>{activePlan.planName}</h2>
+                            <span class="ddps-modal-code">{activePlan.planCode}</span>
+                        </div>
+                        <button class="ddps-modal-close" onclick={closeBenefitsModal}>&#x2715;</button>
+                    </div>
+                    <div class="ddps-modal-body">
+                        <template if:true={isLoadingBenefits}>
+                            <div class="ddps-loading">
+                                <lightning-spinner size="small" alternative-text="Loading..."></lightning-spinner>
+                            </div>
+                        </template>
+                        <template if:false={isLoadingBenefits}>
+                            <!-- Summary boxes -->
+                            <div class="ddps-summary-boxes">
+                                <div class="ddps-sum-box">
+                                    <div class="ddps-sum-val">{activePlan.coinsurancePreventive}%</div>
+                                    <div class="ddps-sum-lbl">Plan Pays (Preventive)</div>
+                                </div>
+                                <div class="ddps-sum-box">
+                                    <div class="ddps-sum-val">{activePlan.coinsuranceBasic}%</div>
+                                    <div class="ddps-sum-lbl">Plan Pays (Basic)</div>
+                                </div>
+                                <div class="ddps-sum-box">
+                                    <div class="ddps-sum-val">{activePlan.coinsuranceMajor}%</div>
+                                    <div class="ddps-sum-lbl">Plan Pays (Major)</div>
+                                </div>
+                                <div class="ddps-sum-box">
+                                    <div class="ddps-sum-val">{activePlan.annualMaxDisplay}</div>
+                                    <div class="ddps-sum-lbl">Annual Maximum</div>
+                                </div>
+                            </div>
+                            <!-- Benefits table by category -->
+                            <template for:each={benefitCategories} for:item="cat">
+                                <div key={cat.name} class="ddps-benefit-section">
+                                    <h3 class="ddps-benefit-cat-title">{cat.name}</h3>
+                                    <table class="ddps-benefit-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Service</th>
+                                                <th>In-Network</th>
+                                                <th>Out-of-Network</th>
+                                                <th>Frequency</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template for:each={cat.benefits} for:item="b">
+                                                <tr key={b.Id}>
+                                                    <td>{b.Benefit_Name__c}</td>
+                                                    <td class="ddps-pct-cell ddps-in-net">{b.In_Network_Coinsurance__c}%</td>
+                                                    <td class="ddps-pct-cell">{b.Out_Network_Coinsurance__c}%</td>
+                                                    <td class="ddps-freq-cell">{b.Frequency__c}</td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                    <div class="ddps-modal-footer">
+                        <button class="ddps-btn-primary"
+                                data-plan-id={activePlan.planId}
+                                onclick={handleSelectFromModal}>
+                            Select This Plan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+    </div>
+</template>

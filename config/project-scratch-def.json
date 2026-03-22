@@ -1,0 +1,26 @@
+{
+  "orgName": "Delta Dental CPQ Dev",
+  "edition": "Developer",
+  "features": ["EnableSetPasswordInApi", "API"],
+  "settings": {
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    },
+    "mobileSettings": {
+      "enableS1EncryptedStoragePref2": false
+    },
+    "languageSettings": {
+      "enableTranslationWorkbench": false,
+      "orgLocale": "en_US",
+      "orgTimeZone": "America/Los_Angeles"
+    },
+    "securitySettings": {
+      "passwordPolicies": {
+        "enableSetPasswordInApi": true
+      }
+    },
+    "chatterSettings": {
+      "enableChatter": true
+    }
+  }
+}

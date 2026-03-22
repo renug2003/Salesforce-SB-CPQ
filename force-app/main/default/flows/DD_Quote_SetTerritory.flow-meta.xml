@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <description>Record-triggered flow. When a Quote is created or the ZIP Code changes, looks up the Rate Territory from DD_ZIP_Territory__mdt and stamps it on the record.</description>
+    <environments>Default</environments>
+    <interviewLabel>DD Quote Set Territory {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>DD Quote Set Territory from ZIP</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value><stringValue>LightningFlowBuilder</stringValue></value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>176</locationX>
+        <locationY>48</locationY>
+        <connector>
+            <targetReference>Check_ZIP_Populated</targetReference>
+        </connector>
+        <filterLogic>or</filterLogic>
+        <filters>
+            <field>ZIP_Code__c</field>
+            <operator>IsChanged</operator>
+            <value><booleanValue>true</booleanValue></value>
+        </filters>
+        <object>DD_Quote__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+
+    <decisions>
+        <description>Only proceed if ZIP Code has a value</description>
+        <name>Check_ZIP_Populated</name>
+        <label>ZIP Code Populated?</label>
+        <locationX>176</locationX>
+        <locationY>200</locationY>
+        <defaultConnectorLabel>No ZIP — Skip</defaultConnectorLabel>
+        <rules>
+            <name>ZIP_Has_Value</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.ZIP_Code__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue><booleanValue>false</booleanValue></rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Lookup_Territory</targetReference>
+            </connector>
+            <label>Yes — Look Up Territory</label>
+        </rules>
+    </decisions>
+
+    <recordLookups>
+        <description>Find the rate territory for the ZIP code</description>
+        <name>Lookup_Territory</name>
+        <label>Look Up ZIP Territory</label>
+        <locationX>176</locationX>
+        <locationY>360</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Set_Territory_On_Quote</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ZIP_Code__c</field>
+            <operator>EqualTo</operator>
+            <value><elementReference>$Record.ZIP_Code__c</elementReference></value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>DD_ZIP_Territory__mdt</object>
+        <outputAssignments>
+            <assignToReference>varTerritory</assignToReference>
+            <field>Rate_Territory__c</field>
+        </outputAssignments>
+    </recordLookups>
+
+    <assignments>
+        <description>Write the territory back to the quote record</description>
+        <name>Set_Territory_On_Quote</name>
+        <label>Stamp Territory on Quote</label>
+        <locationX>176</locationX>
+        <locationY>520</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Rate_Territory__c</assignToReference>
+            <operator>Assign</operator>
+            <value><elementReference>varTerritory</elementReference></value>
+        </assignmentItems>
+    </assignments>
+
+    <variables>
+        <name>varTerritory</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value><stringValue>DEFAULT</stringValue></value>
+    </variables>
+</Flow>

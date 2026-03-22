@@ -1,0 +1,250 @@
+<template>
+    <div class="ddpv-container" lwc:ref="proposalRoot">
+
+        <!-- === COVER PAGE === -->
+        <div class="ddpv-cover">
+            <div class="ddpv-cover-logo">
+                <span class="ddpv-logo-tri">&#9651;</span>
+                <span class="ddpv-logo-wm">DELTA DENTAL</span>
+                <span class="ddpv-logo-sub">of California</span>
+            </div>
+            <div class="ddpv-cover-body">
+                <div class="ddpv-cover-label">Dental &amp; Vision Proposal</div>
+                <h1 class="ddpv-cover-employer">{proposalData.employerName}</h1>
+                <div class="ddpv-cover-meta">
+                    <div class="ddpv-cover-meta-row">
+                        <span class="ddpv-meta-label">Requested Effective Date</span>
+                        <span class="ddpv-meta-val">{proposalData.effectiveDate}</span>
+                    </div>
+                    <div class="ddpv-cover-meta-row">
+                        <span class="ddpv-meta-label">Employees</span>
+                        <span class="ddpv-meta-val">{proposalData.totalEmployees}</span>
+                    </div>
+                    <div class="ddpv-cover-meta-row">
+                        <span class="ddpv-meta-label">Prepared By</span>
+                        <span class="ddpv-meta-val">{proposalData.preparedBy}</span>
+                    </div>
+                    <div class="ddpv-cover-meta-row">
+                        <span class="ddpv-meta-label">Date Prepared</span>
+                        <span class="ddpv-meta-val">{todayDisplay}</span>
+                    </div>
+                    <div class="ddpv-cover-meta-row">
+                        <span class="ddpv-meta-label">Quote Number</span>
+                        <span class="ddpv-meta-val">{proposalData.quoteNumber}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ddpv-cover-footer">
+                Delta Dental of California · 560 Mission Street, Suite 1300 · San Francisco, CA 94105
+                <br/>800-471-0173 · deltadentalins.com
+            </div>
+        </div>
+
+        <!-- === EXECUTIVE SUMMARY === -->
+        <div class="ddpv-page">
+            <div class="ddpv-page-header">
+                <span class="ddpv-section-num">01</span>
+                <h2>Executive Summary</h2>
+            </div>
+            <p class="ddpv-intro">
+                Delta Dental of California is pleased to present this proposal for
+                <strong>{proposalData.employerName}</strong>.
+                The following plans have been selected based on your group's requirements,
+                effective <strong>{proposalData.effectiveDate}</strong>.
+            </p>
+
+            <!-- Premium Summary Boxes -->
+            <div class="ddpv-summary-boxes">
+                <div class="ddpv-sum-box ddpv-sum-total">
+                    <div class="ddpv-sum-label">Total Monthly Premium</div>
+                    <div class="ddpv-sum-amount">${proposalData.totalMonthly}</div>
+                </div>
+                <div class="ddpv-sum-box ddpv-sum-employer">
+                    <div class="ddpv-sum-label">Employer Monthly Cost</div>
+                    <div class="ddpv-sum-amount">${proposalData.employerMonthly}</div>
+                    <div class="ddpv-sum-sub">{proposalData.employerPct}% contribution</div>
+                </div>
+                <div class="ddpv-sum-box ddpv-sum-employee">
+                    <div class="ddpv-sum-label">Employee Monthly Cost</div>
+                    <div class="ddpv-sum-amount">${proposalData.employeeMonthly}</div>
+                </div>
+                <div class="ddpv-sum-box ddpv-sum-annual">
+                    <div class="ddpv-sum-label">Total Annual Premium</div>
+                    <div class="ddpv-sum-amount">${proposalData.totalAnnual}</div>
+                </div>
+            </div>
+
+            <!-- Plans Overview Table -->
+            <table class="ddpv-plans-table">
+                <thead>
+                    <tr>
+                        <th>Plan Name</th>
+                        <th>Type</th>
+                        <th>Network</th>
+                        <th>Annual Max</th>
+                        <th>Monthly Premium</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={proposalData.plans} for:item="plan">
+                        <tr key={plan.planId}>
+                            <td class="ddpv-plan-name-cell">{plan.planName}</td>
+                            <td>{plan.planType}</td>
+                            <td>{plan.network}</td>
+                            <td>{plan.annualMaxDisplay}</td>
+                            <td class="ddpv-amt-cell">${plan.monthlyTotal}</td>
+                        </tr>
+                    </template>
+                    <tr class="ddpv-total-row">
+                        <td colspan="4"><strong>Total Monthly Premium</strong></td>
+                        <td class="ddpv-amt-cell"><strong>${proposalData.totalMonthly}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- === PLAN DETAIL PAGES (one per plan) === -->
+        <template for:each={proposalData.plans} for:item="plan">
+            <div key={plan.planId} class="ddpv-page">
+                <div class="ddpv-page-header">
+                    <span class="ddpv-section-num">&#129442;</span>
+                    <h2>{plan.planName}</h2>
+                </div>
+
+                <!-- Plan Key Facts -->
+                <div class="ddpv-key-facts">
+                    <div class="ddpv-fact">
+                        <div class="ddpv-fact-label">Network</div>
+                        <div class="ddpv-fact-val">{plan.network}</div>
+                    </div>
+                    <div class="ddpv-fact">
+                        <div class="ddpv-fact-label">Deductible (Individual)</div>
+                        <div class="ddpv-fact-val">${plan.deductibleIndividual}</div>
+                    </div>
+                    <div class="ddpv-fact">
+                        <div class="ddpv-fact-label">Annual Maximum</div>
+                        <div class="ddpv-fact-val">{plan.annualMaxDisplay}</div>
+                    </div>
+                    <div class="ddpv-fact">
+                        <div class="ddpv-fact-label">Waiting Period</div>
+                        <div class="ddpv-fact-val">{plan.waitingPeriod}</div>
+                    </div>
+                    <div class="ddpv-fact">
+                        <div class="ddpv-fact-label">Orthodontia</div>
+                        <div class="ddpv-fact-val">{plan.orthoDisplay}</div>
+                    </div>
+                </div>
+
+                <!-- Coinsurance Summary -->
+                <div class="ddpv-coins-grid">
+                    <div class="ddpv-coins-box ddpv-preventive">
+                        <div class="ddpv-coins-pct">{plan.coinsurancePreventive}%</div>
+                        <div class="ddpv-coins-lbl">Preventive<br/>Plan Pays</div>
+                    </div>
+                    <div class="ddpv-coins-box ddpv-basic">
+                        <div class="ddpv-coins-pct">{plan.coinsuranceBasic}%</div>
+                        <div class="ddpv-coins-lbl">Basic<br/>Plan Pays</div>
+                    </div>
+                    <div class="ddpv-coins-box ddpv-major">
+                        <div class="ddpv-coins-pct">{plan.coinsuranceMajor}%</div>
+                        <div class="ddpv-coins-lbl">Major<br/>Plan Pays</div>
+                    </div>
+                </div>
+
+                <!-- Rate Table -->
+                <h3 class="ddpv-section-sub">Monthly Rates</h3>
+                <table class="ddpv-rate-table">
+                    <thead>
+                        <tr>
+                            <th>Coverage Tier</th>
+                            <th>Monthly Rate</th>
+                            <th>Subscribers</th>
+                            <th>Monthly Subtotal</th>
+                            <th>Employer Cost</th>
+                            <th>Employee Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Employee Only (EO)</td>
+                            <td>${plan.rates.rateEO}</td>
+                            <td>{plan.countEO}</td>
+                            <td>${plan.subtotalEO}</td>
+                            <td>${plan.employerEO}</td>
+                            <td>${plan.employeeEO}</td>
+                        </tr>
+                        <tr>
+                            <td>Employee + Spouse (ES)</td>
+                            <td>${plan.rates.rateES}</td>
+                            <td>{plan.countES}</td>
+                            <td>${plan.subtotalES}</td>
+                            <td>${plan.employerES}</td>
+                            <td>${plan.employeeES}</td>
+                        </tr>
+                        <tr>
+                            <td>Employee + Child(ren) (EC)</td>
+                            <td>${plan.rates.rateEC}</td>
+                            <td>{plan.countEC}</td>
+                            <td>${plan.subtotalEC}</td>
+                            <td>${plan.employerEC}</td>
+                            <td>${plan.employeeEC}</td>
+                        </tr>
+                        <tr>
+                            <td>Employee + Family (EF)</td>
+                            <td>${plan.rates.rateEF}</td>
+                            <td>{plan.countEF}</td>
+                            <td>${plan.subtotalEF}</td>
+                            <td>${plan.employerEF}</td>
+                            <td>${plan.employeeEF}</td>
+                        </tr>
+                        <tr class="ddpv-rate-total">
+                            <td colspan="3"><strong>Plan Total</strong></td>
+                            <td><strong>${plan.monthlyTotal}</strong></td>
+                            <td><strong>${plan.employerTotal}</strong></td>
+                            <td><strong>${plan.employeeTotal}</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+
+        <!-- === TERMS & SIGNATURE PAGE === -->
+        <div class="ddpv-page ddpv-sig-page">
+            <div class="ddpv-page-header">
+                <span class="ddpv-section-num">&#128396;</span>
+                <h2>Acceptance &amp; Authorization</h2>
+            </div>
+            <p class="ddpv-terms-text">
+                This proposal is valid for 30 days from the date of preparation.
+                Rates are subject to change based on final enrollment and underwriting review.
+                By signing below, the authorized representative confirms that the information
+                provided is accurate and authorizes Delta Dental of California to proceed
+                with group enrollment.
+            </p>
+            <div class="ddpv-sig-block">
+                <div class="ddpv-sig-field">
+                    <div class="ddpv-sig-line"></div>
+                    <div class="ddpv-sig-label">Authorized Signature</div>
+                </div>
+                <div class="ddpv-sig-field">
+                    <div class="ddpv-sig-line"></div>
+                    <div class="ddpv-sig-label">Printed Name &amp; Title</div>
+                </div>
+                <div class="ddpv-sig-field">
+                    <div class="ddpv-sig-line"></div>
+                    <div class="ddpv-sig-label">Date</div>
+                </div>
+            </div>
+            <div class="ddpv-page-footer">
+                <div class="ddpv-footer-logo">&#9651; DELTA DENTAL of California</div>
+                <div class="ddpv-footer-disc">
+                    This proposal is not a contract of insurance. Coverage is subject to group eligibility,
+                    enrollment requirements, and the terms of the Delta Dental group contract.
+                    DeltaVision is administered by Vision Service Plan (VSP).
+                    Delta Dental of California · 560 Mission Street, Suite 1300 · San Francisco, CA 94105
+                </div>
+            </div>
+        </div>
+
+    </div>
+</template>

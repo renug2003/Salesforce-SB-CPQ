@@ -1,0 +1,71 @@
+/**
+ * ddDesignTokens
+ * Delta Dental of California brand CSS custom properties.
+ * Import in any LWC: @import 'c/ddDesignTokens';
+ */
+:host {
+    /* Primary palette */
+    --dd-navy:            #1F4788;
+    --dd-blue-mid:        #2E6DB4;
+    --dd-gold:            #C89B2A;
+    --dd-gold-light:      #F0C040;
+
+    /* Backgrounds */
+    --dd-page-bg:         #F5F7FA;
+    --dd-card-bg:         #FFFFFF;
+    --dd-card-shadow:     0 2px 8px rgba(0, 0, 0, 0.08);
+
+    /* Text */
+    --dd-text-primary:    #1A1A1A;
+    --dd-text-secondary:  #5A6470;
+    --dd-text-inverse:    #FFFFFF;
+    --dd-text-muted:      rgba(255, 255, 255, 0.65);
+
+    /* Buttons */
+    --dd-btn-primary-bg:      #1F4788;
+    --dd-btn-primary-text:    #FFFFFF;
+    --dd-btn-secondary-bg:    #FFFFFF;
+    --dd-btn-secondary-border: #1F4788;
+    --dd-btn-secondary-text:  #1F4788;
+    --dd-btn-destructive-bg:  #C62828;
+    --dd-btn-destructive-text: #FFFFFF;
+
+    /* Status colors */
+    --dd-success:  #2E7D32;
+    --dd-warning:  #F57F17;
+    --dd-error:    #C62828;
+    --dd-info:     #1565C0;
+
+    /* Spacing */
+    --dd-spacing-xs:  0.25rem;
+    --dd-spacing-sm:  0.5rem;
+    --dd-spacing-md:  1rem;
+    --dd-spacing-lg:  1.5rem;
+    --dd-spacing-xl:  2rem;
+    --dd-spacing-2xl: 3rem;
+
+    /* Border radius */
+    --dd-radius-sm: 4px;
+    --dd-radius-md: 8px;
+    --dd-radius-lg: 12px;
+
+    /* Typography */
+    --dd-font-size-xs:   0.72rem;
+    --dd-font-size-sm:   0.82rem;
+    --dd-font-size-base: 0.875rem;
+    --dd-font-size-md:   1rem;
+    --dd-font-size-lg:   1.125rem;
+    --dd-font-size-xl:   1.25rem;
+    --dd-font-size-2xl:  1.5rem;
+    --dd-font-weight-normal: 400;
+    --dd-font-weight-medium: 500;
+    --dd-font-weight-bold:   700;
+    --dd-font-weight-black:  900;
+
+    /* Header */
+    --dd-header-height:  56px;
+    --dd-header-stripe-height: 3px;
+
+    /* Gold accent gradient (used on header stripe, badges) */
+    --dd-gold-gradient: linear-gradient(90deg, #C89B2A 0%, #F0C040 50%, #C89B2A 100%);
+}

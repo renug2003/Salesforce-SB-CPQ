@@ -1,0 +1,25 @@
+<template>
+    <div class="dd-header">
+        <div class="dd-header-inner">
+            <div class="dd-logo-block">
+                <span class="dd-logo-triangle">&#9651;</span>
+                <span class="dd-logo-wordmark">DELTA DENTAL</span>
+                <span class="dd-logo-sub">of California</span>
+            </div>
+            <div class="dd-header-nav">
+                <template for:each={navItems} for:item="item">
+                    <a key={item.label}
+                       class={item.cssClass}
+                       data-page={item.page}
+                       onclick={handleNavClick}>
+                        {item.label}
+                    </a>
+                </template>
+            </div>
+            <div class="dd-header-user">
+                <span class="dd-user-name">{currentUserName}</span>
+            </div>
+        </div>
+        <div class="dd-header-stripe"></div>
+    </div>
+</template>

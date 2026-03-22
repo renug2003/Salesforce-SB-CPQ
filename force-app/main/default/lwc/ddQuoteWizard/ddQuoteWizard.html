@@ -1,0 +1,799 @@
+<template>
+    <div class="dd-wizard-container">
+
+        <!-- Branded Header -->
+        <div class="dd-wizard-header">
+            <div class="dd-logo-area">
+                <span class="dd-logo-text">&#9651; DELTA DENTAL</span>
+                <span class="dd-logo-sub">of California</span>
+            </div>
+            <div class="dd-wizard-title">
+                <h1>Small Business Quoting</h1>
+                <p>2 – 99 Employees · Dental &amp; Vision Plans · Effective {effectiveDateDisplay}</p>
+            </div>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="dd-progress-bar">
+            <template for:each={steps} for:item="step">
+                <div key={step.id}
+                     class={step.cssClass}
+                     data-step={step.id}
+                     onclick={handleStepClick}>
+                    <div class="dd-step-circle">
+                        <template if:true={step.completed}>
+                            <lightning-icon icon-name="utility:check" size="x-small" alternative-text="Completed"></lightning-icon>
+                        </template>
+                        <template if:false={step.completed}>
+                            <span>{step.number}</span>
+                        </template>
+                    </div>
+                    <div class="dd-step-label">{step.label}</div>
+                </div>
+            </template>
+        </div>
+
+        <!-- Error Banner -->
+        <template if:true={hasError}>
+            <div class="dd-error-banner" role="alert">
+                <lightning-icon icon-name="utility:error" size="small" alternative-text="Error"></lightning-icon>
+                <span>{errorMessage}</span>
+                <button class="dd-error-close" onclick={clearError}>&#x2715;</button>
+            </div>
+        </template>
+
+        <!-- Step Content Area -->
+        <div class="dd-step-content">
+
+            <!-- STEP 1: Employer Information -->
+            <template if:true={isStep1}>
+                <div class="dd-card dd-fade-in">
+                    <div class="dd-card-header">
+                        <h2>&#128197; Employer Information</h2>
+                        <p>Tell us about the employer group you're quoting</p>
+                    </div>
+                    <div class="dd-card-body">
+
+                        <!-- Employer Search (standalone mode only) -->
+                        <template if:true={isStandalone}>
+                            <div class="dd-employer-search-section">
+                                <lightning-record-picker
+                                    label="Search existing employer"
+                                    placeholder="Type to search by employer name..."
+                                    object-api-name="DD_Employer__c"
+                                    value={searchedEmployerId}
+                                    onchange={handleExistingEmployerSelect}>
+                                </lightning-record-picker>
+                                <template if:true={hasSearchedEmployer}>
+                                    <div class="dd-info-banner">
+                                        <lightning-icon icon-name="utility:check_circle" size="small" alternative-text="Selected"></lightning-icon>
+                                        &nbsp;Employer data pre-filled — update effective date below to continue.
+                                    </div>
+                                </template>
+                                <div class="dd-or-divider-row">
+                                    <span class="dd-or-text">— or enter new employer details below —</span>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- Locked employer banner (from Employer record page) -->
+                        <template if:true={isEmployerLocked}>
+                            <div class="dd-employer-locked-banner">
+                                <lightning-icon icon-name="utility:company" size="small" alternative-text="Employer"></lightning-icon>
+                                &nbsp;<strong>{employer.Name}</strong>
+                                <span class="dd-locked-hint">Quoting for this employer</span>
+                            </div>
+                        </template>
+
+                        <div class="dd-form-grid">
+                            <div class="dd-form-field dd-field-full">
+                                <label class="dd-label dd-required">Employer / Company Name</label>
+                                <input type="text"
+                                       class="dd-input"
+                                       placeholder="e.g. Acme Technologies Inc."
+                                       data-field="employerName"
+                                       value={employer.Name}
+                                       readonly={isEmployerLocked}
+                                       onchange={handleEmployerFieldChange} />
+                            </div>
+                            <div class="dd-form-field">
+                                <label class="dd-label">DBA Name</label>
+                                <input type="text"
+                                       class="dd-input"
+                                       placeholder="Doing Business As (if different)"
+                                       data-field="dbaName"
+                                       value={employer.DBA_Name__c}
+                                       onchange={handleEmployerFieldChange} />
+                            </div>
+                            <div class="dd-form-field">
+                                <label class="dd-label dd-required">Billing ZIP Code</label>
+                                <input type="text"
+                                       class="dd-input"
+                                       placeholder="5-digit ZIP"
+                                       data-field="zip"
+                                       maxlength="5"
+                                       value={employer.Billing_ZIP__c}
+                                       onchange={handleZIPChange} />
+                                <template if:true={territoryDisplay}>
+                                    <span class="dd-field-hint dd-territory-badge">
+                                        Rate Territory: {territoryDisplay}
+                                    </span>
+                                </template>
+                            </div>
+                            <div class="dd-form-field">
+                                <label class="dd-label">SIC Code</label>
+                                <input type="text"
+                                       class="dd-input"
+                                       placeholder="4-digit SIC"
+                                       data-field="sic"
+                                       maxlength="4"
+                                       value={employer.SIC_Code__c}
+                                       onchange={handleEmployerFieldChange} />
+                            </div>
+                            <div class="dd-form-field">
+                                <label class="dd-label dd-required">Total Employees</label>
+                                <input type="number"
+                                       class="dd-input"
+                                       placeholder="2 – 99"
+                                       min="2"
+                                       max="99"
+                                       data-field="totalEmployees"
+                                       value={employer.Total_Employees__c}
+                                       onchange={handleEmployerFieldChange} />
+                                <span class="dd-field-hint">Small Business: 2–99 employees</span>
+                            </div>
+                            <div class="dd-form-field">
+                                <label class="dd-label">Eligible Employees</label>
+                                <input type="number"
+                                       class="dd-input"
+                                       placeholder="Number eligible for benefits"
+                                       data-field="eligibleEmployees"
+                                       value={employer.Eligible_Employees__c}
+                                       onchange={handleEmployerFieldChange} />
+                            </div>
+                            <div class="dd-form-field">
+                                <label class="dd-label dd-required">Requested Effective Date</label>
+                                <input type="date"
+                                       class="dd-input"
+                                       data-field="effectiveDate"
+                                       value={effectiveDate}
+                                       min={minEffectiveDate}
+                                       onchange={handleEffectiveDateChange} />
+                                <span class="dd-field-hint">Must be first of the month</span>
+                            </div>
+                            <div class="dd-form-field dd-field-full">
+                                <label class="dd-label">Broker / Agent</label>
+                                <template if:false={showNewBrokerForm}>
+                                    <template if:false={selectedBrokerName}>
+                                        <div class="dd-broker-search-wrapper">
+                                            <div class="dd-broker-row">
+                                                <input type="text"
+                                                       class="dd-input dd-broker-search-input"
+                                                       placeholder="Type to search broker / producer accounts..."
+                                                       value={brokerSearchTerm}
+                                                       oninput={handleBrokerSearchInput} />
+                                                <button class="dd-btn dd-btn-secondary dd-btn-sm" onclick={handleShowNewBrokerForm}>
+                                                    + New Broker
+                                                </button>
+                                            </div>
+                                            <template if:true={showBrokerDropdown}>
+                                                <div class="dd-broker-dropdown">
+                                                    <template if:false={noBrokerResults}>
+                                                        <template for:each={brokerSearchResults} for:item="broker">
+                                                            <div key={broker.id}
+                                                                 class="dd-broker-option"
+                                                                 data-id={broker.id}
+                                                                 data-name={broker.name}
+                                                                 onclick={handleBrokerSelect}>
+                                                                <span class="dd-broker-option-name">{broker.name}</span>
+                                                                <template if:true={broker.phone}>
+                                                                    <span class="dd-broker-option-phone">{broker.phone}</span>
+                                                                </template>
+                                                            </div>
+                                                        </template>
+                                                    </template>
+                                                    <template if:true={noBrokerResults}>
+                                                        <div class="dd-broker-no-results">No results found</div>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </template>
+                                    <template if:true={selectedBrokerName}>
+                                        <div class="dd-broker-selected-row">
+                                            <lightning-icon icon-name="utility:user" size="xx-small" alternative-text="Broker"></lightning-icon>
+                                            &nbsp;<strong>{selectedBrokerName}</strong>
+                                            <button class="dd-btn-link dd-broker-clear" onclick={handleBrokerClear}>&#x2715; Remove</button>
+                                        </div>
+                                    </template>
+                                </template>
+                                <template if:true={showNewBrokerForm}>
+                                    <div class="dd-new-broker-form">
+                                        <p class="dd-new-broker-label">Create New Broker Account (Type: Producer)</p>
+                                        <div class="dd-form-grid">
+                                            <div class="dd-form-field">
+                                                <label class="dd-label dd-required">Agency / Broker Name</label>
+                                                <input type="text" class="dd-input"
+                                                       placeholder="e.g. Smith Insurance Agency"
+                                                       data-field="brokerName"
+                                                       onchange={handleNewBrokerFieldChange} />
+                                            </div>
+                                            <div class="dd-form-field">
+                                                <label class="dd-label">Phone</label>
+                                                <input type="tel" class="dd-input"
+                                                       placeholder="(555) 000-0000"
+                                                       data-field="brokerPhone"
+                                                       onchange={handleNewBrokerFieldChange} />
+                                            </div>
+                                            <div class="dd-form-field">
+                                                <label class="dd-label">Email</label>
+                                                <input type="email" class="dd-input"
+                                                       placeholder="broker@agency.com"
+                                                       data-field="brokerEmail"
+                                                       onchange={handleNewBrokerFieldChange} />
+                                            </div>
+                                            <div class="dd-form-field">
+                                                <label class="dd-label">License Number</label>
+                                                <input type="text" class="dd-input"
+                                                       placeholder="CA License #"
+                                                       data-field="brokerLicense"
+                                                       onchange={handleNewBrokerFieldChange} />
+                                            </div>
+                                        </div>
+                                        <div class="dd-broker-actions">
+                                            <button class="dd-btn dd-btn-secondary" onclick={handleCancelNewBroker}>Cancel</button>
+                                            <button class="dd-btn dd-btn-primary"
+                                                    onclick={handleSaveNewBroker}
+                                                    disabled={isSavingBroker}>
+                                                <template if:true={isSavingBroker}>
+                                                    <lightning-spinner size="small" alternative-text="Saving..."></lightning-spinner>
+                                                </template>
+                                                Save Broker
+                                            </button>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dd-card-footer">
+                        <div></div>
+                        <button class="dd-btn dd-btn-primary" onclick={handleStep1Next}>
+                            Next: Select Plan Types
+                            <lightning-icon icon-name="utility:chevronright" size="x-small" alternative-text="Next"></lightning-icon>
+                        </button>
+                    </div>
+                </div>
+            </template>
+
+            <!-- STEP 2: Plan Type Selection (Guided Selling) -->
+            <template if:true={isStep2}>
+                <div class="dd-card dd-fade-in">
+                    <div class="dd-card-header">
+                        <h2>&#127973; Select Coverage Types</h2>
+                        <p>Choose which types of coverage to quote for <strong>{employer.Name}</strong></p>
+                    </div>
+                    <div class="dd-card-body">
+                        <div class="dd-coverage-selector">
+                            <div class={dentalCardClass} onclick={toggleDental}>
+                                <div class="dd-coverage-icon">&#129442;</div>
+                                <div class="dd-coverage-content">
+                                    <h3>Dental Coverage</h3>
+                                    <p>PPO plans including preventive, basic, major services and orthodontia</p>
+                                    <ul class="dd-coverage-bullets">
+                                        <li>Delta Dental PPO network — largest in CA</li>
+                                        <li>Preventive services typically 100% covered</li>
+                                        <li>Multiple plan options from core to enhanced</li>
+                                    </ul>
+                                </div>
+                                <div class="dd-coverage-check">
+                                    <template if:true={includeDental}>
+                                        <lightning-icon icon-name="utility:check_circle" size="medium" class="dd-check-active"></lightning-icon>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <div class={visionCardClass} onclick={toggleVision}>
+                                <div class="dd-coverage-icon">&#128064;</div>
+                                <div class="dd-coverage-content">
+                                    <h3>Vision Coverage</h3>
+                                    <p>VSP vision plans including eye exams, frames, and contact lens allowances</p>
+                                    <ul class="dd-coverage-bullets">
+                                        <li>Administered by VSP — largest vision network</li>
+                                        <li>Annual eye exam at no copay (in-network)</li>
+                                        <li>Frame and contact lens allowances included</li>
+                                    </ul>
+                                </div>
+                                <div class="dd-coverage-check">
+                                    <template if:true={includeVision}>
+                                        <lightning-icon icon-name="utility:check_circle" size="medium" class="dd-check-active"></lightning-icon>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+
+                        <template if:false={coverageTypeSelected}>
+                            <div class="dd-info-banner">
+                                <lightning-icon icon-name="utility:info" size="small" alternative-text="Info"></lightning-icon>
+                                Please select at least one coverage type to continue
+                            </div>
+                        </template>
+                    </div>
+                    <div class="dd-card-footer">
+                        <button class="dd-btn dd-btn-secondary" onclick={handleBack}>
+                            <lightning-icon icon-name="utility:chevronleft" size="x-small" alternative-text="Back"></lightning-icon>
+                            Back
+                        </button>
+                        <button class="dd-btn dd-btn-primary"
+                                onclick={handleStep2Next}
+                                disabled={coverageTypeNotSelected}>
+                            Next: Choose Plans
+                            <lightning-icon icon-name="utility:chevronright" size="x-small" alternative-text="Next"></lightning-icon>
+                        </button>
+                    </div>
+                </div>
+            </template>
+
+            <!-- STEP 3: Plan Selection -->
+            <template if:true={isStep3}>
+                <div class="dd-card dd-fade-in">
+                    <div class="dd-card-header">
+                        <h2>&#128203; Select Plans</h2>
+                        <p>Available plans for <strong>{employer.Name}</strong> · {employer.Total_Employees__c} employees · Effective {effectiveDateDisplay}</p>
+                    </div>
+                    <div class="dd-card-body">
+
+                        <!-- Loading spinner -->
+                        <template if:true={isLoadingPlans}>
+                            <div class="dd-loading">
+                                <lightning-spinner alternative-text="Loading plans..." size="medium"></lightning-spinner>
+                                <p>Loading available plans...</p>
+                            </div>
+                        </template>
+
+                        <template if:false={isLoadingPlans}>
+                            <!-- Dental Plans -->
+                            <template if:true={includeDental}>
+                                <h3 class="dd-section-title">&#129442; Dental Plans</h3>
+                                <div class="dd-plan-grid">
+                                    <template for:each={dentalPlans} for:item="plan">
+                                        <div key={plan.planId}
+                                             class={plan.cardClass}
+                                             data-plan-id={plan.planId}
+                                             onclick={handlePlanToggle}>
+                                            <div class="dd-plan-header">
+                                                <div class="dd-plan-name">{plan.planName}</div>
+                                                <div class="dd-plan-type-badge">{plan.planType}</div>
+                                                <template if:true={plan.selected}>
+                                                    <div class="dd-selected-badge">Selected</div>
+                                                </template>
+                                            </div>
+                                            <div class="dd-plan-highlights">
+                                                <div class="dd-plan-stat">
+                                                    <span class="dd-stat-label">Deductible</span>
+                                                    <span class="dd-stat-value">${plan.deductibleIndividual}/individual</span>
+                                                </div>
+                                                <div class="dd-plan-stat">
+                                                    <span class="dd-stat-label">Annual Max</span>
+                                                    <span class="dd-stat-value">{plan.annualMaxDisplay}</span>
+                                                </div>
+                                                <div class="dd-plan-stat">
+                                                    <span class="dd-stat-label">Preventive</span>
+                                                    <span class="dd-stat-value dd-stat-green">{plan.coinsurancePreventive}% covered</span>
+                                                </div>
+                                                <div class="dd-plan-stat">
+                                                    <span class="dd-stat-label">Basic</span>
+                                                    <span class="dd-stat-value">{plan.coinsuranceBasic}% covered</span>
+                                                </div>
+                                                <div class="dd-plan-stat">
+                                                    <span class="dd-stat-label">Major</span>
+                                                    <span class="dd-stat-value">{plan.coinsuranceMajor}% covered</span>
+                                                </div>
+                                                <div class="dd-plan-stat">
+                                                    <span class="dd-stat-label">Network</span>
+                                                    <span class="dd-stat-value">{plan.network}</span>
+                                                </div>
+                                            </div>
+                                            <div class="dd-plan-footer">
+                                                <template if:true={plan.rate}>
+                                                    <span class="dd-rate-from">From <strong>${plan.rate.rateEO}/mo</strong> EO</span>
+                                                </template>
+                                                <button class="dd-btn-link"
+                                                        data-plan-id={plan.planId}
+                                                        onclick={handleViewBenefits}>
+                                                    View Benefits &#8250;
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+
+                            <!-- Vision Plans -->
+                            <template if:true={includeVision}>
+                                <h3 class="dd-section-title">&#128064; Vision Plans</h3>
+                                <div class="dd-plan-grid">
+                                    <template for:each={visionPlans} for:item="plan">
+                                        <div key={plan.planId}
+                                             class={plan.cardClass}
+                                             data-plan-id={plan.planId}
+                                             onclick={handlePlanToggle}>
+                                            <div class="dd-plan-header">
+                                                <div class="dd-plan-name">{plan.planName}</div>
+                                                <div class="dd-plan-type-badge dd-vision-badge">{plan.planType}</div>
+                                                <template if:true={plan.selected}>
+                                                    <div class="dd-selected-badge">Selected</div>
+                                                </template>
+                                            </div>
+                                            <div class="dd-plan-highlights">
+                                                <div class="dd-plan-stat">
+                                                    <span class="dd-stat-label">Annual Max</span>
+                                                    <span class="dd-stat-value">{plan.annualMaxDisplay}</span>
+                                                </div>
+                                                <div class="dd-plan-stat">
+                                                    <span class="dd-stat-label">Network</span>
+                                                    <span class="dd-stat-value">VSP</span>
+                                                </div>
+                                                <div class="dd-plan-stat">
+                                                    <span class="dd-stat-label">Eye Exam</span>
+                                                    <span class="dd-stat-value dd-stat-green">$0 copay (in-network)</span>
+                                                </div>
+                                            </div>
+                                            <div class="dd-plan-footer">
+                                                <template if:true={plan.rate}>
+                                                    <span class="dd-rate-from">From <strong>${plan.rate.rateEO}/mo</strong> EO</span>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                    <div class="dd-card-footer">
+                        <button class="dd-btn dd-btn-secondary" onclick={handleBack}>
+                            <lightning-icon icon-name="utility:chevronleft" size="x-small" alternative-text="Back"></lightning-icon>
+                            Back
+                        </button>
+                        <button class="dd-btn dd-btn-primary"
+                                onclick={handleStep3Next}
+                                disabled={noPlansSelected}>
+                            Next: Configure Rates
+                            <lightning-icon icon-name="utility:chevronright" size="x-small" alternative-text="Next"></lightning-icon>
+                        </button>
+                    </div>
+                </div>
+            </template>
+
+            <!-- STEP 4: Rate Configuration -->
+            <template if:true={isStep4}>
+                <div class="dd-card dd-fade-in">
+                    <div class="dd-card-header">
+                        <h2>&#128200; Configure Rates &amp; Contribution</h2>
+                        <p>Enter employee tier counts and employer contribution percentage</p>
+                    </div>
+                    <div class="dd-card-body">
+                        <!-- Contribution Setting -->
+                        <div class="dd-contribution-section">
+                            <h3>Employer Contribution</h3>
+                            <div class="dd-form-grid">
+                                <div class="dd-form-field">
+                                    <label class="dd-label">Employer Pays (%)</label>
+                                    <div class="dd-input-group">
+                                        <input type="range"
+                                               class="dd-slider"
+                                               min="0"
+                                               max="100"
+                                               step="5"
+                                               value={employerContributionPct}
+                                               onchange={handleContributionChange} />
+                                        <span class="dd-slider-value">{employerContributionPct}%</span>
+                                    </div>
+                                    <span class="dd-field-hint">
+                                        Employer: {employerContributionPct}% &nbsp;|&nbsp; Employee: {employeeContributionPct}%
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Per-plan rate tables -->
+                        <template for:each={selectedPlansForRating} for:item="plan">
+                            <div key={plan.planId} class="dd-rate-table-section">
+                                <h3>{plan.planName}</h3>
+                                <div class="dd-rate-table-wrapper">
+                                    <table class="dd-rate-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Coverage Tier</th>
+                                                <th>Monthly Rate</th>
+                                                <th>Employee Count</th>
+                                                <th>Monthly Subtotal</th>
+                                                <th>Employer Cost</th>
+                                                <th>Employee Cost</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><span class="dd-tier-badge">EO</span> Employee Only</td>
+                                                <td class="dd-rate-cell">${plan.rates.rateEO}</td>
+                                                <td>
+                                                    <input type="number"
+                                                           class="dd-input dd-count-input"
+                                                           min="0"
+                                                           value={plan.countEO}
+                                                           data-plan-id={plan.planId}
+                                                           data-tier="EO"
+                                                           onchange={handleCountChange} />
+                                                </td>
+                                                <td class="dd-rate-cell">${plan.subtotalEO}</td>
+                                                <td class="dd-rate-cell dd-employer-cost">${plan.employerEO}</td>
+                                                <td class="dd-rate-cell dd-employee-cost">${plan.employeeEO}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="dd-tier-badge">ES</span> Employee + Spouse</td>
+                                                <td class="dd-rate-cell">${plan.rates.rateES}</td>
+                                                <td>
+                                                    <input type="number"
+                                                           class="dd-input dd-count-input"
+                                                           min="0"
+                                                           value={plan.countES}
+                                                           data-plan-id={plan.planId}
+                                                           data-tier="ES"
+                                                           onchange={handleCountChange} />
+                                                </td>
+                                                <td class="dd-rate-cell">${plan.subtotalES}</td>
+                                                <td class="dd-rate-cell dd-employer-cost">${plan.employerES}</td>
+                                                <td class="dd-rate-cell dd-employee-cost">${plan.employeeES}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="dd-tier-badge">EC</span> Employee + Child(ren)</td>
+                                                <td class="dd-rate-cell">${plan.rates.rateEC}</td>
+                                                <td>
+                                                    <input type="number"
+                                                           class="dd-input dd-count-input"
+                                                           min="0"
+                                                           value={plan.countEC}
+                                                           data-plan-id={plan.planId}
+                                                           data-tier="EC"
+                                                           onchange={handleCountChange} />
+                                                </td>
+                                                <td class="dd-rate-cell">${plan.subtotalEC}</td>
+                                                <td class="dd-rate-cell dd-employer-cost">${plan.employerEC}</td>
+                                                <td class="dd-rate-cell dd-employee-cost">${plan.employeeEC}</td>
+                                            </tr>
+                                            <tr class="dd-total-row">
+                                                <td><span class="dd-tier-badge">EF</span> Employee + Family</td>
+                                                <td class="dd-rate-cell">${plan.rates.rateEF}</td>
+                                                <td>
+                                                    <input type="number"
+                                                           class="dd-input dd-count-input"
+                                                           min="0"
+                                                           value={plan.countEF}
+                                                           data-plan-id={plan.planId}
+                                                           data-tier="EF"
+                                                           onchange={handleCountChange} />
+                                                </td>
+                                                <td class="dd-rate-cell">${plan.subtotalEF}</td>
+                                                <td class="dd-rate-cell dd-employer-cost">${plan.employerEF}</td>
+                                                <td class="dd-rate-cell dd-employee-cost">${plan.employeeEF}</td>
+                                            </tr>
+                                            <tr class="dd-grand-total-row">
+                                                <td colspan="3"><strong>Plan Monthly Total</strong></td>
+                                                <td class="dd-rate-cell"><strong>${plan.monthlyTotal}</strong></td>
+                                                <td class="dd-rate-cell dd-employer-cost"><strong>${plan.employerTotal}</strong></td>
+                                                <td class="dd-rate-cell dd-employee-cost"><strong>${plan.employeeTotal}</strong></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="dd-card-footer">
+                        <button class="dd-btn dd-btn-secondary" onclick={handleBack}>
+                            <lightning-icon icon-name="utility:chevronleft" size="x-small" alternative-text="Back"></lightning-icon>
+                            Back
+                        </button>
+                        <button class="dd-btn dd-btn-primary" onclick={handleStep4Next}>
+                            Next: Review Summary
+                            <lightning-icon icon-name="utility:chevronright" size="x-small" alternative-text="Next"></lightning-icon>
+                        </button>
+                    </div>
+                </div>
+            </template>
+
+            <!-- STEP 5: Quote Summary -->
+            <template if:true={isStep5}>
+                <div class="dd-card dd-fade-in">
+                    <div class="dd-card-header">
+                        <h2>&#128196; Quote Summary</h2>
+                        <p>Review your quote before generating a proposal</p>
+                    </div>
+                    <div class="dd-card-body">
+                        <div class="dd-summary-header">
+                            <div class="dd-summary-employer">
+                                <div class="dd-summary-label">Employer</div>
+                                <div class="dd-summary-value">{employer.Name}</div>
+                            </div>
+                            <div class="dd-summary-effective">
+                                <div class="dd-summary-label">Effective Date</div>
+                                <div class="dd-summary-value">{effectiveDateDisplay}</div>
+                            </div>
+                            <div class="dd-summary-employees">
+                                <div class="dd-summary-label">Employees</div>
+                                <div class="dd-summary-value">{employer.Total_Employees__c}</div>
+                            </div>
+                            <div class="dd-summary-territory">
+                                <div class="dd-summary-label">Rate Territory</div>
+                                <div class="dd-summary-value">{territoryDisplay}</div>
+                            </div>
+                        </div>
+
+                        <div class="dd-premium-totals">
+                            <div class="dd-premium-box dd-total-premium">
+                                <div class="dd-premium-label">Total Monthly Premium</div>
+                                <div class="dd-premium-amount">${totalMonthlyPremium}</div>
+                            </div>
+                            <div class="dd-premium-box dd-employer-premium">
+                                <div class="dd-premium-label">Employer Monthly Cost</div>
+                                <div class="dd-premium-amount">${employerMonthlyTotal}</div>
+                                <div class="dd-premium-sub">{employerContributionPct}% contribution</div>
+                            </div>
+                            <div class="dd-premium-box dd-employee-premium">
+                                <div class="dd-premium-label">Employee Monthly Cost</div>
+                                <div class="dd-premium-amount">${employeeMonthlyTotal}</div>
+                                <div class="dd-premium-sub">{employeeContributionPct}% of premium</div>
+                            </div>
+                            <div class="dd-premium-box dd-annual-premium">
+                                <div class="dd-premium-label">Total Annual Premium</div>
+                                <div class="dd-premium-amount">${totalAnnualPremium}</div>
+                            </div>
+                        </div>
+
+                        <div class="dd-selected-plans-summary">
+                            <template for:each={selectedPlansForRating} for:item="plan">
+                                <div key={plan.planId} class="dd-plan-summary-row">
+                                    <div class="dd-plan-summary-name">{plan.planName}</div>
+                                    <div class="dd-plan-summary-cost">${plan.monthlyTotal}/month</div>
+                                </div>
+                            </template>
+                        </div>
+
+                        <div class="dd-notes-section">
+                            <label class="dd-label">Notes</label>
+                            <textarea class="dd-input dd-textarea"
+                                      placeholder="Add any notes for this quote..."
+                                      value={quoteNotes}
+                                      onchange={handleNotesChange}
+                                      rows="3">
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="dd-card-footer">
+                        <button class="dd-btn dd-btn-secondary" onclick={handleBack}>
+                            <lightning-icon icon-name="utility:chevronleft" size="x-small" alternative-text="Back"></lightning-icon>
+                            Back
+                        </button>
+                        <div class="dd-footer-actions">
+                            <button class="dd-btn dd-btn-secondary" onclick={handleSaveDraft}>
+                                <lightning-icon icon-name="utility:save" size="x-small" alternative-text="Save"></lightning-icon>
+                                Save Draft
+                            </button>
+                            <button class="dd-btn dd-btn-primary"
+                                    onclick={handleGenerateProposal}
+                                    disabled={isSaving}>
+                                <template if:false={isSaving}>
+                                    <lightning-icon icon-name="utility:pdf_ext" size="x-small" alternative-text="Proposal"></lightning-icon>
+                                    Generate Proposal PDF
+                                </template>
+                                <template if:true={isSaving}>
+                                    <lightning-spinner size="small" alternative-text="Saving..."></lightning-spinner>
+                                    Saving...
+                                </template>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- STEP 6: Proposal Generated -->
+            <template if:true={isStep6}>
+                <div class="dd-card dd-fade-in dd-success-card">
+                    <div class="dd-card-header dd-success-header">
+                        <lightning-icon icon-name="utility:success" size="large" class="dd-success-icon" alternative-text="Success"></lightning-icon>
+                        <h2>&#9989; Proposal Created!</h2>
+                        <p>Quote <strong>{quoteNumber}</strong> has been saved and your proposal PDF is stored in Salesforce Files</p>
+                    </div>
+                    <div class="dd-card-body">
+                        <div class="dd-pdf-saved-notice">
+                            <lightning-icon icon-name="utility:attach" size="small" alternative-text="File"></lightning-icon>
+                            <span>The proposal PDF has been saved to the <strong>Files</strong> section of this Quote record. Open the Quote record to preview or share it.</span>
+                        </div>
+                        <div class="dd-success-actions">
+                            <button class="dd-btn dd-btn-primary" onclick={handleViewQuote}>
+                                <lightning-icon icon-name="utility:open" size="x-small" alternative-text="Open"></lightning-icon>
+                                Open Quote &amp; View PDF
+                            </button>
+                            <button class="dd-btn dd-btn-secondary" onclick={handleNewQuote}>
+                                <lightning-icon icon-name="utility:new" size="x-small" alternative-text="New"></lightning-icon>
+                                Start New Quote
+                            </button>
+                        </div>
+
+                        <!-- Next Steps -->
+                        <div class="dd-next-steps">
+                            <h3>Next Steps</h3>
+                            <div class="dd-next-step">
+                                <span class="dd-step-num">1</span>
+                                <span>Send the proposal to the employer or broker</span>
+                            </div>
+                            <div class="dd-next-step">
+                                <span class="dd-step-num">2</span>
+                                <span>When employer accepts, update quote status to <strong>Accepted</strong></span>
+                            </div>
+                            <div class="dd-next-step">
+                                <span class="dd-step-num">3</span>
+                                <span>Convert accepted quote to a <strong>Group</strong> and create a <strong>Contract</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+        </div>
+        <!-- End Step Content -->
+
+        <!-- Benefits Panel Overlay -->
+        <template if:true={showBenefitsPanel}>
+            <div class="dd-benefits-overlay" onclick={handleCloseBenefits}>
+                <div class="dd-benefits-panel" onclick={handleBenefitsPanelClick}>
+                    <div class="dd-benefits-panel-header">
+                        <div>
+                            <h3 class="dd-benefits-plan-title">{benefitsPlanName}</h3>
+                            <p class="dd-benefits-plan-sub">Plan Benefits Schedule</p>
+                        </div>
+                        <button class="dd-benefits-close" onclick={handleCloseBenefits}>&#x2715;</button>
+                    </div>
+                    <div class="dd-benefits-panel-body">
+                        <template if:true={isLoadingBenefits}>
+                            <div class="dd-loading">
+                                <lightning-spinner alternative-text="Loading benefits..." size="medium"></lightning-spinner>
+                                <p>Loading benefits...</p>
+                            </div>
+                        </template>
+                        <template if:false={isLoadingBenefits}>
+                            <table class="dd-benefits-table">
+                                <thead>
+                                    <tr>
+                                        <th>Benefit</th>
+                                        <th>Category</th>
+                                        <th>In-Network</th>
+                                        <th>Out-of-Network</th>
+                                        <th>Frequency</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={planBenefits} for:item="benefit">
+                                        <tr key={benefit.Id}>
+                                            <td>{benefit.Name}</td>
+                                            <td><span class="dd-benefit-category">{benefit.Benefit_Category__c}</span></td>
+                                            <td class="dd-benefit-in-network">{benefit.In_Network_Coinsurance__c}</td>
+                                            <td class="dd-benefit-out-network">{benefit.Out_Network_Coinsurance__c}</td>
+                                            <td>{benefit.Frequency__c}</td>
+                                            <td class="dd-benefit-notes">{benefit.Notes__c}</td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </template>
+                    </div>
+                    <div class="dd-benefits-panel-footer">
+                        <button class="dd-btn dd-btn-primary" onclick={handleCloseBenefits}>Close</button>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+    </div>
+</template>

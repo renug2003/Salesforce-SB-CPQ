@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>DD_CPQ_AppTitle</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>App Title</shortDescription>
+        <value>Delta Dental of California — Small Business CPQ</value>
+    </labels>
+    <labels>
+        <fullName>DD_CPQ_QuoteWizardTitle</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Quote wizard heading</shortDescription>
+        <value>Small Business Quoting</value>
+    </labels>
+    <labels>
+        <fullName>DD_CPQ_SegmentDescription</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>SB segment descriptor</shortDescription>
+        <value>2 – 99 Employees · Dental &amp; Vision Plans</value>
+    </labels>
+    <labels>
+        <fullName>DD_CPQ_ErrorGroupSizeInvalid</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Group size validation error</shortDescription>
+        <value>Small Business segment requires 2–99 employees. Please verify the employee count.</value>
+    </labels>
+    <labels>
+        <fullName>DD_CPQ_ErrorZIPRequired</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>ZIP code required</shortDescription>
+        <value>Please enter a valid 5-digit ZIP code to determine rate territory.</value>
+    </labels>
+    <labels>
+        <fullName>DD_CPQ_ErrorEffectiveDateRequired</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Effective date validation error</shortDescription>
+        <value>Effective date is required and must be the first day of the month.</value>
+    </labels>
+    <labels>
+        <fullName>DD_CPQ_ErrorSignedDateFuture</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Signed date cannot be in future</shortDescription>
+        <value>Date Signed cannot be in the future.</value>
+    </labels>
+    <labels>
+        <fullName>DD_CPQ_ErrorSignedDateRequired</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Signed date required</shortDescription>
+        <value>Date Signed is required when marking the contract as signed.</value>
+    </labels>
+    <labels>
+        <fullName>DD_CPQ_QuoteExpirationDays</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Quote expiration default days</shortDescription>
+        <value>30</value>
+    </labels>
+    <labels>
+        <fullName>DD_CPQ_ContractStatusApproved</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Contract approved status label</shortDescription>
+        <value>Approved</value>
+    </labels>
+    <labels>
+        <fullName>DD_CPQ_ContractStatusActive</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Contract active status label</shortDescription>
+        <value>Active</value>
+    </labels>
+    <labels>
+        <fullName>DD_CPQ_ContractStatusExpired</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Contract expired status label</shortDescription>
+        <value>Expired</value>
+    </labels>
+    <labels>
+        <fullName>DD_CPQ_ProposalDisclaimer</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Proposal footer disclaimer</shortDescription>
+        <value>This proposal is not a contract of insurance. Coverage is subject to group eligibility, enrollment requirements, and the terms of the Delta Dental group contract. Rates are subject to final underwriting review. DeltaVision is administered by Vision Service Plan (VSP).</value>
+    </labels>
+    <labels>
+        <fullName>DD_CPQ_PhoneNumber</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>DDCA customer care phone</shortDescription>
+        <value>800-471-0173</value>
+    </labels>
+    <labels>
+        <fullName>DD_CPQ_Website</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>DDCA website</shortDescription>
+        <value>deltadentalins.com</value>
+    </labels>
+    <labels>
+        <fullName>DD_CPQ_Address</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>DDCA mailing address</shortDescription>
+        <value>Delta Dental of California · 560 Mission Street, Suite 1300 · San Francisco, CA 94105</value>
+    </labels>
+</CustomLabels>

@@ -1,0 +1,50 @@
+<template>
+    <div class="slds-p-around_medium">
+        <template if:false={isDone}>
+            <div class="slds-text-align_center slds-p-vertical_medium">
+                <lightning-icon icon-name="utility:contract" size="large" class="slds-m-bottom_medium"></lightning-icon>
+                <h2 class="slds-text-heading_medium slds-m-bottom_small">Create Contract</h2>
+                <p class="slds-text-body_regular slds-m-bottom_large" style="color:#555;">
+                    A new contract record will be created from this group and a signed contract PDF
+                    will be generated and saved to the Files section of the contract.
+                </p>
+                <template if:true={hasError}>
+                    <div class="slds-notify slds-notify_alert slds-alert_error slds-m-bottom_medium" role="alert">
+                        <lightning-icon icon-name="utility:error" size="x-small" alternative-text="Error"></lightning-icon>
+                        &nbsp;{errorMessage}
+                    </div>
+                </template>
+                <div class="slds-button-group">
+                    <button class="slds-button slds-button_neutral" onclick={handleCancel} disabled={isCreating}>Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick={handleCreate} disabled={isCreating}>
+                        <template if:true={isCreating}>
+                            <lightning-spinner size="small" alternative-text="Creating..."></lightning-spinner>
+                            &nbsp;Creating...
+                        </template>
+                        <template if:false={isCreating}>
+                            <lightning-icon icon-name="utility:add" size="x-small" alternative-text="Create"></lightning-icon>
+                            &nbsp;Create Contract &amp; PDF
+                        </template>
+                    </button>
+                </div>
+            </div>
+        </template>
+        <template if:true={isDone}>
+            <div class="slds-text-align_center slds-p-vertical_medium">
+                <lightning-icon icon-name="utility:success" size="large" style="color:#2e7d32;" class="slds-m-bottom_small"></lightning-icon>
+                <h2 class="slds-text-heading_medium slds-m-bottom_small">Contract Created!</h2>
+                <div class="slds-box slds-theme_shade slds-m-vertical_medium" style="border-left:4px solid #2e7d32; text-align:left; padding:0.75rem 1rem;">
+                    <lightning-icon icon-name="utility:attach" size="x-small" alternative-text="File"></lightning-icon>
+                    &nbsp;The contract record has been created and the contract PDF has been saved to the <strong>Files</strong> section of the contract.
+                </div>
+                <div class="slds-button-group">
+                    <button class="slds-button slds-button_brand" onclick={handleViewContract}>
+                        <lightning-icon icon-name="utility:open" size="x-small" alternative-text="Open"></lightning-icon>
+                        &nbsp;Open Contract Record
+                    </button>
+                    <button class="slds-button slds-button_neutral" onclick={handleCancel}>Close</button>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

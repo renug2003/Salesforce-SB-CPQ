@@ -1,0 +1,10 @@
+<template>
+    <lightning-modal-header label="New Quote"></lightning-modal-header>
+    <lightning-modal-body>
+        <c-dd-quote-wizard
+            employer-id={resolvedEmployerId}
+            onquotecreated={handleQuoteCreated}
+            oncancel={handleCancel}>
+        </c-dd-quote-wizard>
+    </lightning-modal-body>
+</template>

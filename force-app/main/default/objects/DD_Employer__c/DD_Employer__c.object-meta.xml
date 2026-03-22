@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Employer</label>
+    <pluralLabel>Employers</pluralLabel>
+    <nameField>
+        <label>Employer Name</label>
+        <type>Text</type>
+    </nameField>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <sharingModel>ReadWrite</sharingModel>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>DBA_Name__c</fullName>
+        <label>DBA Name</label>
+        <type>Text</type>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Doing Business As name, if different from legal name</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Tax_ID__c</fullName>
+        <label>Tax ID (FEIN)</label>
+        <type>Text</type>
+        <length>9</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <inlineHelpText>Federal Employer Identification Number (9 digits, no dashes)</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>SIC_Code__c</fullName>
+        <label>SIC Code</label>
+        <type>Text</type>
+        <length>4</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Standard Industrial Classification code for the employer's primary business</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Billing_ZIP__c</fullName>
+        <label>Billing ZIP Code</label>
+        <type>Text</type>
+        <length>5</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>5-digit ZIP code used for rate territory determination</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>County__c</fullName>
+        <label>County</label>
+        <type>Text</type>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>California county where employer is located</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>State__c</fullName>
+        <label>State</label>
+        <type>Picklist</type>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>State where employer is located</inlineHelpText>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value><fullName>CA</fullName><label>California</label><default>true</default></value>
+                <value><fullName>AZ</fullName><label>Arizona</label><default>false</default></value>
+                <value><fullName>NV</fullName><label>Nevada</label><default>false</default></value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Total_Employees__c</fullName>
+        <label>Total Employees</label>
+        <type>Number</type>
+        <precision>3</precision>
+        <scale>0</scale>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <inlineHelpText>Total number of employees (for Small Business: 2–99)</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Eligible_Employees__c</fullName>
+        <label>Eligible Employees</label>
+        <type>Number</type>
+        <precision>3</precision>
+        <scale>0</scale>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Number of employees eligible for benefits</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Requested_Effective_Date__c</fullName>
+        <label>Requested Effective Date</label>
+        <type>Date</type>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Requested start date for coverage</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Broker_Agent__c</fullName>
+        <label>Broker/Agent</label>
+        <type>Lookup</type>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Employer Groups</relationshipLabel>
+        <relationshipName>Employer_Groups</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Licensed broker or agent associated with this employer</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Broker_Account__c</fullName>
+        <label>Broker Account</label>
+        <type>Lookup</type>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Employer Groups (Broker)</relationshipLabel>
+        <relationshipName>Employer_Broker_Groups</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Broker or agency account (Type = Producer) for this employer</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Account__c</fullName>
+        <label>Account</label>
+        <type>Lookup</type>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Employer Records</relationshipLabel>
+        <relationshipName>Employer_Records</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Linked Salesforce Account record</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <label>Status</label>
+        <type>Picklist</type>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <inlineHelpText>Current status of this employer</inlineHelpText>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value><fullName>Prospect</fullName><label>Prospect</label><default>true</default></value>
+                <value><fullName>Quoted</fullName><label>Quoted</label><default>false</default></value>
+                <value><fullName>Active</fullName><label>Active</label><default>false</default></value>
+                <value><fullName>Inactive</fullName><label>Inactive</label><default>false</default></value>
+                <value><fullName>Terminated</fullName><label>Terminated</label><default>false</default></value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Segment__c</fullName>
+        <label>Segment</label>
+        <type>Picklist</type>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Market segment this employer belongs to</inlineHelpText>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value><fullName>Small Business</fullName><label>Small Business (2-99)</label><default>true</default></value>
+                <value><fullName>Large Group</fullName><label>Large Group (100+)</label><default>false</default></value>
+                <value><fullName>Individual</fullName><label>Individual</label><default>false</default></value>
+                <value><fullName>Medicare</fullName><label>Medicare</label><default>false</default></value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Phone__c</fullName>
+        <label>Phone</label>
+        <type>Phone</type>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Primary phone number for the employer</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Email__c</fullName>
+        <label>Email</label>
+        <type>Email</type>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Primary contact email for the employer</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Street_Address__c</fullName>
+        <label>Street Address</label>
+        <type>TextArea</type>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Street address of the employer's principal place of business</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>City__c</fullName>
+        <label>City</label>
+        <type>Text</type>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>City of the employer's principal place of business</inlineHelpText>
+    </fields>
+    <searchLayouts>
+        <searchResultsAdditionalFields>Status__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Segment__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Total_Employees__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Billing_ZIP__c</searchResultsAdditionalFields>
+    </searchLayouts>
+</CustomObject>

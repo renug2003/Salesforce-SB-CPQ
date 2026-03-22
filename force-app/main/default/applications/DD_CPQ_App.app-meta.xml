@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <defaultLandingTab>DD_Quote__c</defaultLandingTab>
+    <description>Delta Dental of California Small Business CPQ — Quoting, Proposals, Groups and Contracts</description>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>true</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <isOmniPinnedViewEnabled>false</isOmniPinnedViewEnabled>
+    <label>Delta Dental CPQ</label>
+    <navType>Standard</navType>
+    <setupExperience>all</setupExperience>
+    <tabs>standard-Lead</tabs>
+    <tabs>standard-Opportunity</tabs>
+    <tabs>DD_New_Quote</tabs>
+    <tabs>DD_Quote__c</tabs>
+    <tabs>DD_Employer__c</tabs>
+    <tabs>DD_Plan__c</tabs>
+    <tabs>DD_Contract__c</tabs>
+    <tabs>DD_Group__c</tabs>
+    <tabs>DD_Proposal__c</tabs>
+    <uiType>Lightning</uiType>
+</CustomApplication>

@@ -1,0 +1,1178 @@
+/* ============================================================
+   Delta Dental of California — Small Business CPQ
+   Quote Wizard LWC Stylesheet
+   Brand Colors: Navy #1F4788 | Blue #2E6DB4 | Gold #C89B2A
+   ============================================================ */
+
+/* ── Design Tokens ── */
+:host {
+    --dd-navy: #1F4788;
+    --dd-blue-mid: #2E6DB4;
+    --dd-blue-light: #5B9BD5;
+    --dd-blue-pale: #DEEAF1;
+    --dd-gold: #C89B2A;
+    --dd-gold-light: #F5E6C0;
+    --dd-white: #FFFFFF;
+    --dd-gray-dark: #2C3E50;
+    --dd-gray-mid: #666666;
+    --dd-gray-light: #F0F3F8;
+    --dd-border: #D0D9E8;
+    --dd-success: #1B7A3E;
+    --dd-success-bg: #E8F5EE;
+    --dd-error: #C62828;
+    --dd-error-bg: #FDEDED;
+    --dd-warning: #E65100;
+    --dd-shadow: 0 2px 12px rgba(31, 71, 136, 0.12);
+    --dd-shadow-hover: 0 6px 24px rgba(31, 71, 136, 0.2);
+    --dd-radius: 8px;
+    --dd-radius-sm: 4px;
+    --dd-font: 'Salesforce Sans', 'Helvetica Neue', Arial, sans-serif;
+    font-family: var(--dd-font);
+}
+
+/* ── Container ── */
+.dd-wizard-container {
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
+    background: var(--dd-gray-light);
+    min-height: 500px;
+    padding-bottom: 3rem;
+}
+
+/* ── Branded Header ── */
+.dd-wizard-header {
+    background: linear-gradient(135deg, var(--dd-navy) 0%, var(--dd-blue-mid) 100%);
+    color: var(--dd-white);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+
+.dd-logo-area {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid rgba(255,255,255,0.3);
+    padding-right: 2rem;
+}
+
+.dd-logo-text {
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: var(--dd-white);
+}
+
+.dd-logo-sub {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.75);
+    margin-top: 2px;
+    letter-spacing: 1px;
+}
+
+.dd-wizard-title h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+    color: var(--dd-white);
+}
+
+.dd-wizard-title p {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.8);
+    margin: 0;
+}
+
+/* ── Progress Bar ── */
+.dd-progress-bar {
+    display: flex;
+    background: var(--dd-white);
+    border-bottom: 2px solid var(--dd-border);
+    padding: 0 1rem;
+    overflow-x: auto;
+}
+
+.dd-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    position: relative;
+    flex: 1;
+    min-width: 80px;
+    transition: background 0.2s;
+}
+
+.dd-step:hover {
+    background: var(--dd-gray-light);
+}
+
+.dd-step::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 40%;
+    background: var(--dd-border);
+}
+
+.dd-step:last-child::after { display: none; }
+
+.dd-step-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.875rem;
+    background: var(--dd-border);
+    color: var(--dd-gray-mid);
+    margin-bottom: 6px;
+    transition: all 0.3s;
+}
+
+.dd-step-active .dd-step-circle {
+    background: var(--dd-navy);
+    color: var(--dd-white);
+    box-shadow: 0 0 0 3px var(--dd-blue-pale);
+}
+
+.dd-step-completed .dd-step-circle {
+    background: var(--dd-success);
+    color: var(--dd-white);
+}
+
+.dd-step-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--dd-gray-mid);
+    text-align: center;
+    white-space: nowrap;
+}
+
+.dd-step-active .dd-step-label {
+    color: var(--dd-navy);
+    font-weight: 700;
+}
+
+.dd-step-completed .dd-step-label {
+    color: var(--dd-success);
+}
+
+/* ── Error Banner ── */
+.dd-error-banner {
+    background: var(--dd-error-bg);
+    border-left: 4px solid var(--dd-error);
+    color: var(--dd-error);
+    padding: 0.75rem 1.5rem;
+    margin: 1rem 1.5rem 0;
+    border-radius: var(--dd-radius-sm);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dd-error-close {
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--dd-error);
+    font-size: 1rem;
+}
+
+.dd-info-banner {
+    background: var(--dd-blue-pale);
+    border-left: 4px solid var(--dd-blue-mid);
+    color: var(--dd-blue-mid);
+    padding: 0.75rem 1rem;
+    border-radius: var(--dd-radius-sm);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* ── Step Content ── */
+.dd-step-content {
+    padding: 1.5rem;
+}
+
+/* ── Card ── */
+.dd-card {
+    background: var(--dd-white);
+    border-radius: var(--dd-radius);
+    box-shadow: var(--dd-shadow);
+    overflow: hidden;
+}
+
+.dd-card-header {
+    background: linear-gradient(90deg, var(--dd-navy) 0%, var(--dd-blue-mid) 100%);
+    padding: 1.25rem 1.5rem;
+    color: var(--dd-white);
+}
+
+.dd-card-header h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+    color: var(--dd-white);
+}
+
+.dd-card-header p {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.85);
+    margin: 0;
+}
+
+.dd-card-body {
+    padding: 1.5rem;
+}
+
+.dd-card-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--dd-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--dd-gray-light);
+}
+
+.dd-footer-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+/* ── Form Styles ── */
+.dd-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+}
+
+.dd-field-full {
+    grid-column: 1 / -1;
+}
+
+.dd-form-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.dd-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--dd-gray-dark);
+    margin-bottom: 0.35rem;
+}
+
+.dd-required::after {
+    content: ' *';
+    color: var(--dd-error);
+}
+
+.dd-input {
+    border: 1px solid var(--dd-border);
+    border-radius: var(--dd-radius-sm);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: var(--dd-white);
+    color: var(--dd-gray-dark);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dd-input:focus {
+    outline: none;
+    border-color: var(--dd-blue-mid);
+    box-shadow: 0 0 0 3px rgba(46, 109, 180, 0.15);
+}
+
+.dd-input:hover {
+    border-color: var(--dd-blue-light);
+}
+
+.dd-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.dd-field-hint {
+    font-size: 0.75rem;
+    color: var(--dd-gray-mid);
+    margin-top: 0.3rem;
+}
+
+.dd-territory-badge {
+    color: var(--dd-navy);
+    font-weight: 600;
+    background: var(--dd-blue-pale);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+}
+
+/* ── Coverage Selector ── */
+.dd-coverage-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 640px) {
+    .dd-coverage-selector { grid-template-columns: 1fr; }
+}
+
+.dd-coverage-card {
+    border: 2px solid var(--dd-border);
+    border-radius: var(--dd-radius);
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: start;
+}
+
+.dd-coverage-card:hover {
+    border-color: var(--dd-blue-mid);
+    box-shadow: var(--dd-shadow-hover);
+    transform: translateY(-2px);
+}
+
+.dd-coverage-selected {
+    border-color: var(--dd-navy) !important;
+    background: linear-gradient(135deg, rgba(31,71,136,0.05), rgba(46,109,180,0.05));
+    box-shadow: var(--dd-shadow-hover);
+}
+
+.dd-coverage-icon {
+    font-size: 2.5rem;
+    margin-top: 4px;
+}
+
+.dd-coverage-content h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--dd-navy);
+    margin: 0 0 8px 0;
+}
+
+.dd-coverage-content p {
+    font-size: 0.85rem;
+    color: var(--dd-gray-mid);
+    margin: 0 0 12px 0;
+}
+
+.dd-coverage-bullets {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dd-coverage-bullets li {
+    font-size: 0.82rem;
+    color: var(--dd-gray-dark);
+    padding: 2px 0;
+}
+
+.dd-coverage-bullets li::before {
+    content: '✓ ';
+    color: var(--dd-success);
+    font-weight: 700;
+}
+
+.dd-coverage-check {
+    color: var(--dd-navy);
+}
+
+.dd-check-active {
+    --slds-c-icon-color-foreground-default: var(--dd-navy);
+}
+
+/* ── Plan Grid ── */
+.dd-section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dd-navy);
+    margin: 1.5rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--dd-blue-pale);
+}
+
+.dd-plan-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.dd-plan-card {
+    border: 2px solid var(--dd-border);
+    border-radius: var(--dd-radius);
+    background: var(--dd-white);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.dd-plan-card:hover {
+    border-color: var(--dd-blue-mid);
+    box-shadow: var(--dd-shadow-hover);
+    transform: translateY(-2px);
+}
+
+.dd-plan-selected {
+    border-color: var(--dd-navy) !important;
+    box-shadow: 0 0 0 3px rgba(31,71,136,0.15) !important;
+}
+
+.dd-plan-header {
+    background: linear-gradient(135deg, var(--dd-navy), var(--dd-blue-mid));
+    padding: 1rem;
+    border-radius: 6px 6px 0 0;
+    position: relative;
+}
+
+.dd-plan-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--dd-white);
+    line-height: 1.3;
+}
+
+.dd-plan-type-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    color: var(--dd-white);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-top: 6px;
+}
+
+.dd-vision-badge {
+    background: rgba(200, 155, 42, 0.4);
+}
+
+.dd-selected-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--dd-gold);
+    color: var(--dd-white);
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.dd-plan-highlights {
+    padding: 0.75rem 1rem;
+    flex: 1;
+}
+
+.dd-plan-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--dd-gray-light);
+    font-size: 0.82rem;
+}
+
+.dd-plan-stat:last-child { border-bottom: none; }
+
+.dd-stat-label { color: var(--dd-gray-mid); }
+.dd-stat-value { color: var(--dd-gray-dark); font-weight: 600; }
+.dd-stat-green { color: var(--dd-success) !important; }
+
+.dd-plan-footer {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--dd-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--dd-gray-light);
+    border-radius: 0 0 6px 6px;
+}
+
+.dd-rate-from {
+    font-size: 0.82rem;
+    color: var(--dd-gray-mid);
+}
+
+.dd-rate-from strong {
+    color: var(--dd-navy);
+    font-size: 1rem;
+}
+
+.dd-btn-link {
+    background: none;
+    border: none;
+    color: var(--dd-blue-mid);
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0;
+    text-decoration: underline;
+}
+
+/* ── Rate Table ── */
+.dd-contribution-section {
+    background: var(--dd-blue-pale);
+    border-radius: var(--dd-radius);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.dd-contribution-section h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--dd-navy);
+    margin: 0 0 1rem 0;
+}
+
+.dd-slider {
+    width: 100%;
+    accent-color: var(--dd-navy);
+    cursor: pointer;
+}
+
+.dd-input-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.dd-slider-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--dd-navy);
+    min-width: 45px;
+}
+
+.dd-rate-table-section {
+    margin-bottom: 2rem;
+}
+
+.dd-rate-table-section h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dd-navy);
+    margin: 0 0 0.75rem 0;
+}
+
+.dd-rate-table-wrapper {
+    overflow-x: auto;
+}
+
+.dd-rate-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    border-radius: var(--dd-radius);
+    overflow: hidden;
+    box-shadow: var(--dd-shadow);
+}
+
+.dd-rate-table thead {
+    background: var(--dd-navy);
+    color: var(--dd-white);
+}
+
+.dd-rate-table th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.dd-rate-table td {
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--dd-border);
+    color: var(--dd-gray-dark);
+}
+
+.dd-rate-table tbody tr:hover {
+    background: var(--dd-gray-light);
+}
+
+.dd-total-row td {
+    background: var(--dd-blue-pale);
+}
+
+.dd-grand-total-row td {
+    background: var(--dd-navy);
+    color: var(--dd-white) !important;
+    font-weight: 700;
+}
+
+.dd-grand-total-row .dd-employer-cost,
+.dd-grand-total-row .dd-employee-cost {
+    color: var(--dd-gold) !important;
+}
+
+.dd-rate-cell { font-weight: 600; }
+.dd-employer-cost { color: var(--dd-navy) !important; }
+.dd-employee-cost { color: var(--dd-blue-mid) !important; }
+
+.dd-tier-badge {
+    background: var(--dd-blue-pale);
+    color: var(--dd-navy);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 6px;
+}
+
+.dd-count-input {
+    width: 70px !important;
+    text-align: center;
+    padding: 0.3rem 0.4rem !important;
+}
+
+/* ── Premium Summary ── */
+.dd-summary-header {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    background: var(--dd-blue-pale);
+    border-radius: var(--dd-radius);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.dd-summary-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--dd-gray-mid);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.dd-summary-value {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--dd-navy);
+}
+
+.dd-premium-totals {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .dd-premium-totals { grid-template-columns: repeat(2, 1fr); }
+    .dd-summary-header { grid-template-columns: repeat(2, 1fr); }
+}
+
+.dd-premium-box {
+    border-radius: var(--dd-radius);
+    padding: 1.25rem;
+    text-align: center;
+}
+
+.dd-total-premium { background: var(--dd-navy); color: white; }
+.dd-employer-premium { background: var(--dd-blue-mid); color: white; }
+.dd-employee-premium { background: var(--dd-blue-light); color: white; }
+.dd-annual-premium { background: var(--dd-gold); color: white; }
+
+.dd-premium-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    opacity: 0.85;
+    margin-bottom: 6px;
+}
+
+.dd-premium-amount {
+    font-size: 1.6rem;
+    font-weight: 800;
+}
+
+.dd-premium-sub {
+    font-size: 0.72rem;
+    opacity: 0.8;
+    margin-top: 4px;
+}
+
+.dd-selected-plans-summary {
+    margin-bottom: 1.25rem;
+}
+
+.dd-plan-summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--dd-border);
+    font-size: 0.9rem;
+}
+
+.dd-plan-summary-name { color: var(--dd-gray-dark); font-weight: 500; }
+.dd-plan-summary-cost { color: var(--dd-navy); font-weight: 700; }
+
+/* ── Buttons ── */
+.dd-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.25rem;
+    border-radius: var(--dd-radius-sm);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.dd-btn-primary {
+    background: var(--dd-navy);
+    color: var(--dd-white);
+    border-color: var(--dd-navy);
+}
+
+.dd-btn-primary:hover:not(:disabled) {
+    background: var(--dd-blue-mid);
+    border-color: var(--dd-blue-mid);
+    box-shadow: 0 4px 12px rgba(31,71,136,0.3);
+}
+
+.dd-btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.dd-btn-secondary {
+    background: var(--dd-white);
+    color: var(--dd-navy);
+    border-color: var(--dd-navy);
+}
+
+.dd-btn-secondary:hover {
+    background: var(--dd-blue-pale);
+}
+
+.dd-pdf-btn {
+    background: var(--dd-gold);
+    border-color: var(--dd-gold);
+    color: var(--dd-white);
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+}
+
+.dd-pdf-btn:hover {
+    background: #a07820;
+    border-color: #a07820;
+}
+
+/* ── Success Card ── */
+.dd-success-card .dd-card-header {
+    background: linear-gradient(135deg, var(--dd-success) 0%, #2E7D32 100%);
+    text-align: center;
+    padding: 2rem;
+}
+
+.dd-success-header h2 {
+    font-size: 1.5rem;
+}
+
+.dd-pdf-saved-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: #E8F5E9;
+    border: 1px solid #A5D6A7;
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    margin: 0 0 1.5rem 0;
+    font-size: 0.9rem;
+    color: #1B5E20;
+}
+
+.dd-success-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+}
+
+.dd-next-steps {
+    background: var(--dd-blue-pale);
+    border-radius: var(--dd-radius);
+    padding: 1.25rem;
+}
+
+.dd-next-steps h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--dd-navy);
+    margin: 0 0 1rem 0;
+}
+
+.dd-next-step {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    font-size: 0.875rem;
+    color: var(--dd-gray-dark);
+}
+
+.dd-step-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--dd-navy);
+    color: var(--dd-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* ── Loading ── */
+.dd-loading {
+    text-align: center;
+    padding: 3rem;
+    color: var(--dd-gray-mid);
+}
+
+/* ── Notes ── */
+.dd-notes-section {
+    margin-top: 1rem;
+}
+
+/* ── Employer Search (Standalone) ── */
+.dd-employer-search-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px dashed var(--dd-border);
+}
+
+.dd-or-divider-row {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.dd-or-text {
+    font-size: 0.8rem;
+    color: var(--dd-gray-mid);
+    font-style: italic;
+}
+
+.dd-employer-locked-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(90deg, var(--dd-blue-pale), rgba(222, 234, 241, 0.3));
+    border: 1px solid var(--dd-blue-mid);
+    border-radius: var(--dd-radius);
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.25rem;
+    color: var(--dd-navy);
+    font-size: 0.95rem;
+}
+
+.dd-locked-hint {
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: var(--dd-gray-mid);
+    font-style: italic;
+}
+
+.dd-input[readonly] {
+    background: var(--dd-gray-light);
+    color: var(--dd-gray-mid);
+    cursor: not-allowed;
+}
+
+/* ── Broker Field ── */
+.dd-broker-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-end;
+}
+
+.dd-broker-search-wrapper {
+    position: relative;
+}
+
+.dd-broker-search-input {
+    width: 100%;
+}
+
+.dd-broker-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid var(--dd-border);
+    border-radius: var(--dd-radius);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    z-index: 100;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.dd-broker-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0.9rem;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f2f5;
+}
+
+.dd-broker-option:last-child {
+    border-bottom: none;
+}
+
+.dd-broker-option:hover {
+    background: #f0f4ff;
+}
+
+.dd-broker-option-name {
+    font-weight: 600;
+    color: var(--dd-navy);
+}
+
+.dd-broker-option-phone {
+    font-size: 0.8rem;
+    color: var(--dd-gray-mid);
+}
+
+.dd-broker-no-results {
+    padding: 0.75rem 1rem;
+    color: var(--dd-gray-mid);
+    font-style: italic;
+    font-size: 0.875rem;
+}
+
+.dd-broker-selected-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.75rem;
+    background: #f0f4ff;
+    border: 1px solid var(--dd-blue-mid);
+    border-radius: var(--dd-radius);
+    font-size: 0.9rem;
+}
+
+.dd-broker-clear {
+    margin-left: auto;
+    color: var(--dd-error, #c62828);
+    font-size: 0.8rem;
+}
+
+.dd-broker-picker {
+    flex: 1;
+}
+
+.dd-btn-sm {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    height: fit-content;
+}
+
+.dd-new-broker-form {
+    border: 1px solid var(--dd-border);
+    border-radius: var(--dd-radius);
+    padding: 1rem;
+    background: var(--dd-gray-light);
+    margin-top: 0.5rem;
+}
+
+.dd-new-broker-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--dd-navy);
+    margin: 0 0 1rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.dd-broker-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+
+.dd-broker-selected {
+    display: inline-flex;
+    align-items: center;
+    color: var(--dd-success);
+    font-weight: 600;
+    margin-top: 0.35rem;
+}
+
+/* ── Animations ── */
+.dd-fade-in {
+    animation: ddFadeIn 0.3s ease-in-out;
+}
+
+@keyframes ddFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Benefits Panel Overlay ── */
+.dd-benefits-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.dd-benefits-panel {
+    background: #fff;
+    border-radius: var(--dd-radius);
+    width: 100%;
+    max-width: 860px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+.dd-benefits-panel-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    background: var(--dd-navy);
+    color: #fff;
+}
+
+.dd-benefits-plan-title {
+    margin: 0 0 0.2rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.dd-benefits-plan-sub {
+    margin: 0;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.75);
+}
+
+.dd-benefits-close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.3rem;
+    cursor: pointer;
+    padding: 0 0.25rem;
+    line-height: 1;
+    opacity: 0.8;
+}
+
+.dd-benefits-close:hover {
+    opacity: 1;
+}
+
+.dd-benefits-panel-body {
+    overflow-y: auto;
+    flex: 1;
+    padding: 1rem 0;
+}
+
+.dd-benefits-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.dd-benefits-table thead tr {
+    background: #f5f7fa;
+    border-bottom: 2px solid var(--dd-navy);
+}
+
+.dd-benefits-table th {
+    padding: 0.65rem 1rem;
+    text-align: left;
+    font-weight: 700;
+    color: var(--dd-navy);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.dd-benefits-table tbody tr {
+    border-bottom: 1px solid #eef0f4;
+}
+
+.dd-benefits-table tbody tr:hover {
+    background: #f9fbff;
+}
+
+.dd-benefits-table td {
+    padding: 0.65rem 1rem;
+    vertical-align: top;
+    color: #333;
+}
+
+.dd-benefit-category {
+    display: inline-block;
+    background: #e8f0fe;
+    color: var(--dd-navy);
+    border-radius: 4px;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.dd-benefit-in-network {
+    color: var(--dd-success, #2e7d32);
+    font-weight: 600;
+}
+
+.dd-benefit-out-network {
+    color: var(--dd-gray-mid);
+}
+
+.dd-benefit-notes {
+    font-size: 0.8rem;
+    color: var(--dd-gray-mid);
+    font-style: italic;
+}
+
+.dd-benefits-panel-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #eef0f4;
+    display: flex;
+    justify-content: flex-end;
+}

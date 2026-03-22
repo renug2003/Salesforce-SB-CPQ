@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <description>Scheduled flow that runs daily. Activates Approved contracts whose Start Date is today, and expires Active contracts whose End Date has passed.</description>
+    <environments>Default</environments>
+    <interviewLabel>DD Contract Daily Status Check {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>DD Contract Daily Status Check</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value><stringValue>LightningFlowBuilder</stringValue></value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>176</locationX>
+        <locationY>48</locationY>
+        <connector>
+            <targetReference>Get_Contracts_To_Activate</targetReference>
+        </connector>
+        <schedule>
+            <frequency>Daily</frequency>
+            <startDate>2025-01-01</startDate>
+            <startTime>09:00:00.000Z</startTime>
+        </schedule>
+        <triggerType>Scheduled</triggerType>
+    </start>
+    <status>Draft</status>
+    <recordLookups>
+        <description>Find all Approved contracts with Start Date = Today</description>
+        <name>Get_Contracts_To_Activate</name>
+        <label>Get Contracts to Activate</label>
+        <locationX>176</locationX>
+        <locationY>200</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Activate_Contracts</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value><stringValue>Approved</stringValue></value>
+        </filters>
+        <filters>
+            <field>Start_Date__c</field>
+            <operator>LessThanOrEqualTo</operator>
+            <value><elementReference>$Flow.CurrentDate</elementReference></value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>DD_Contract__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Find all Active contracts with End Date before today</description>
+        <name>Get_Contracts_To_Expire</name>
+        <label>Get Contracts to Expire</label>
+        <locationX>176</locationX>
+        <locationY>520</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Expire_Contracts</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value><stringValue>Active</stringValue></value>
+        </filters>
+        <filters>
+            <field>End_Date__c</field>
+            <operator>LessThan</operator>
+            <value><elementReference>$Flow.CurrentDate</elementReference></value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>DD_Contract__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <description>Set Status to Active for all qualifying contracts</description>
+        <name>Activate_Contracts</name>
+        <label>Activate Contracts</label>
+        <locationX>176</locationX>
+        <locationY>360</locationY>
+        <connector>
+            <targetReference>Get_Contracts_To_Expire</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value><stringValue>Approved</stringValue></value>
+        </filters>
+        <filters>
+            <field>Start_Date__c</field>
+            <operator>LessThanOrEqualTo</operator>
+            <value><elementReference>$Flow.CurrentDate</elementReference></value>
+        </filters>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value><stringValue>Active</stringValue></value>
+        </inputAssignments>
+        <object>DD_Contract__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <description>Set Status to Expired for all qualifying contracts</description>
+        <name>Expire_Contracts</name>
+        <label>Expire Contracts</label>
+        <locationX>176</locationX>
+        <locationY>680</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value><stringValue>Active</stringValue></value>
+        </filters>
+        <filters>
+            <field>End_Date__c</field>
+            <operator>LessThan</operator>
+            <value><elementReference>$Flow.CurrentDate</elementReference></value>
+        </filters>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value><stringValue>Expired</stringValue></value>
+        </inputAssignments>
+        <object>DD_Contract__c</object>
+    </recordUpdates>
+</Flow>

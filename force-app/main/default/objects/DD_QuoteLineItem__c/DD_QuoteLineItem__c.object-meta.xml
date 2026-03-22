@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Quote Line Item</label>
+    <pluralLabel>Quote Line Items</pluralLabel>
+    <nameField>
+        <label>Line Item Number</label>
+        <type>AutoNumber</type>
+        <startingNumber>1</startingNumber>
+        <displayFormat>QLI-{000000}</displayFormat>
+    </nameField>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <sharingModel>ControlledByParent</sharingModel>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>false</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Quote__c</fullName>
+        <label>Quote</label>
+        <type>MasterDetail</type>
+        <referenceTo>DD_Quote__c</referenceTo>
+        <relationshipLabel>Quote Line Items</relationshipLabel>
+        <relationshipName>Quote_Line_Items</relationshipName>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+        <inlineHelpText>Parent quote this line belongs to</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Plan__c</fullName>
+        <label>Plan</label>
+        <type>Lookup</type>
+        <referenceTo>DD_Plan__c</referenceTo>
+        <relationshipLabel>Quote Line Items</relationshipLabel>
+        <relationshipName>Quote_Line_Items</relationshipName>
+        <deleteConstraint>Restrict</deleteConstraint>
+        <required>true</required>
+        <inlineHelpText>Insurance plan selected for this line</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Plan_Name__c</fullName>
+        <label>Plan Name</label>
+        <type>Text</type>
+        <formula>Plan__r.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Name of the selected plan</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Plan_Type__c</fullName>
+        <label>Plan Type</label>
+        <type>Text</type>
+        <formula>TEXT(Plan__r.Plan_Type__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Type of the selected plan</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Rate_EO__c</fullName>
+        <label>Rate (Employee Only)</label>
+        <type>Currency</type>
+        <precision>8</precision>
+        <scale>2</scale>
+        <required>false</required>
+        <inlineHelpText>Monthly rate per employee-only subscriber</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Rate_ES__c</fullName>
+        <label>Rate (Employee + Spouse)</label>
+        <type>Currency</type>
+        <precision>8</precision>
+        <scale>2</scale>
+        <required>false</required>
+        <inlineHelpText>Monthly rate per employee + spouse subscriber</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Rate_EC__c</fullName>
+        <label>Rate (Employee + Child)</label>
+        <type>Currency</type>
+        <precision>8</precision>
+        <scale>2</scale>
+        <required>false</required>
+        <inlineHelpText>Monthly rate per employee + child(ren) subscriber</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Rate_EF__c</fullName>
+        <label>Rate (Employee + Family)</label>
+        <type>Currency</type>
+        <precision>8</precision>
+        <scale>2</scale>
+        <required>false</required>
+        <inlineHelpText>Monthly rate per employee + family subscriber</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Count_EO__c</fullName>
+        <label>Count (Employee Only)</label>
+        <type>Number</type>
+        <precision>4</precision>
+        <scale>0</scale>
+        <required>false</required>
+        <inlineHelpText>Number of employee-only subscribers</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Count_ES__c</fullName>
+        <label>Count (Employee + Spouse)</label>
+        <type>Number</type>
+        <precision>4</precision>
+        <scale>0</scale>
+        <required>false</required>
+        <inlineHelpText>Number of employee + spouse subscribers</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Count_EC__c</fullName>
+        <label>Count (Employee + Child)</label>
+        <type>Number</type>
+        <precision>4</precision>
+        <scale>0</scale>
+        <required>false</required>
+        <inlineHelpText>Number of employee + child(ren) subscribers</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Count_EF__c</fullName>
+        <label>Count (Employee + Family)</label>
+        <type>Number</type>
+        <precision>4</precision>
+        <scale>0</scale>
+        <required>false</required>
+        <inlineHelpText>Number of employee + family subscribers</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Monthly_Subtotal__c</fullName>
+        <label>Monthly Subtotal</label>
+        <type>Currency</type>
+        <formula>
+            (NULLVALUE(Rate_EO__c, 0) * NULLVALUE(Count_EO__c, 0)) +
+            (NULLVALUE(Rate_ES__c, 0) * NULLVALUE(Count_ES__c, 0)) +
+            (NULLVALUE(Rate_EC__c, 0) * NULLVALUE(Count_EC__c, 0)) +
+            (NULLVALUE(Rate_EF__c, 0) * NULLVALUE(Count_EF__c, 0))
+        </formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <precision>12</precision>
+        <scale>2</scale>
+        <inlineHelpText>Total monthly premium for this plan line</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Employer_Contribution_Pct__c</fullName>
+        <label>Employer Contribution %</label>
+        <type>Percent</type>
+        <precision>5</precision>
+        <scale>1</scale>
+        <required>false</required>
+        <inlineHelpText>Percentage of premium paid by employer</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Employer_Monthly_Cost__c</fullName>
+        <label>Employer Monthly Cost</label>
+        <type>Currency</type>
+        <formula>Monthly_Subtotal__c * (NULLVALUE(Employer_Contribution_Pct__c, 0) / 100)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <precision>12</precision>
+        <scale>2</scale>
+        <inlineHelpText>Employer's share of the monthly premium</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Employee_Monthly_Cost__c</fullName>
+        <label>Employee Monthly Cost</label>
+        <type>Currency</type>
+        <formula>Monthly_Subtotal__c - Employer_Monthly_Cost__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <precision>12</precision>
+        <scale>2</scale>
+        <inlineHelpText>Employee's share of the monthly premium</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Is_Selected__c</fullName>
+        <label>Is Selected</label>
+        <type>Checkbox</type>
+        <defaultValue>true</defaultValue>
+        <inlineHelpText>Primary selected plan for proposal (for comparison scenarios)</inlineHelpText>
+    </fields>
+</CustomObject>

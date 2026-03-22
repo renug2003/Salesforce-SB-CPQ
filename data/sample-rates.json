@@ -1,0 +1,124 @@
+{
+  "records": [
+    {
+      "attributes": { "type": "DD_PlanRate__c", "referenceId": "RateRef1" },
+      "Plan__c": "@PlanRef1",
+      "Rate_Territory__c": "TERRITORY_1",
+      "Rating_Tier__c": "EO",
+      "Monthly_Rate__c": 28.50,
+      "Effective_Date__c": "2025-01-01",
+      "Group_Size_Min__c": 2,
+      "Group_Size_Max__c": 24
+    },
+    {
+      "attributes": { "type": "DD_PlanRate__c", "referenceId": "RateRef2" },
+      "Plan__c": "@PlanRef1",
+      "Rate_Territory__c": "TERRITORY_1",
+      "Rating_Tier__c": "ES",
+      "Monthly_Rate__c": 52.40,
+      "Effective_Date__c": "2025-01-01",
+      "Group_Size_Min__c": 2,
+      "Group_Size_Max__c": 24
+    },
+    {
+      "attributes": { "type": "DD_PlanRate__c", "referenceId": "RateRef3" },
+      "Plan__c": "@PlanRef1",
+      "Rate_Territory__c": "TERRITORY_1",
+      "Rating_Tier__c": "EC",
+      "Monthly_Rate__c": 68.90,
+      "Effective_Date__c": "2025-01-01",
+      "Group_Size_Min__c": 2,
+      "Group_Size_Max__c": 24
+    },
+    {
+      "attributes": { "type": "DD_PlanRate__c", "referenceId": "RateRef4" },
+      "Plan__c": "@PlanRef1",
+      "Rate_Territory__c": "TERRITORY_1",
+      "Rating_Tier__c": "EF",
+      "Monthly_Rate__c": 82.15,
+      "Effective_Date__c": "2025-01-01",
+      "Group_Size_Min__c": 2,
+      "Group_Size_Max__c": 24
+    },
+    {
+      "attributes": { "type": "DD_PlanRate__c", "referenceId": "RateRef5" },
+      "Plan__c": "@PlanRef2",
+      "Rate_Territory__c": "TERRITORY_1",
+      "Rating_Tier__c": "EO",
+      "Monthly_Rate__c": 38.75,
+      "Effective_Date__c": "2025-01-01",
+      "Group_Size_Min__c": 2,
+      "Group_Size_Max__c": 24
+    },
+    {
+      "attributes": { "type": "DD_PlanRate__c", "referenceId": "RateRef6" },
+      "Plan__c": "@PlanRef2",
+      "Rate_Territory__c": "TERRITORY_1",
+      "Rating_Tier__c": "ES",
+      "Monthly_Rate__c": 71.20,
+      "Effective_Date__c": "2025-01-01",
+      "Group_Size_Min__c": 2,
+      "Group_Size_Max__c": 24
+    },
+    {
+      "attributes": { "type": "DD_PlanRate__c", "referenceId": "RateRef7" },
+      "Plan__c": "@PlanRef2",
+      "Rate_Territory__c": "TERRITORY_1",
+      "Rating_Tier__c": "EC",
+      "Monthly_Rate__c": 89.50,
+      "Effective_Date__c": "2025-01-01",
+      "Group_Size_Min__c": 2,
+      "Group_Size_Max__c": 24
+    },
+    {
+      "attributes": { "type": "DD_PlanRate__c", "referenceId": "RateRef8" },
+      "Plan__c": "@PlanRef2",
+      "Rate_Territory__c": "TERRITORY_1",
+      "Rating_Tier__c": "EF",
+      "Monthly_Rate__c": 112.80,
+      "Effective_Date__c": "2025-01-01",
+      "Group_Size_Min__c": 2,
+      "Group_Size_Max__c": 24
+    },
+    {
+      "attributes": { "type": "DD_PlanRate__c", "referenceId": "RateRef9" },
+      "Plan__c": "@PlanRef5",
+      "Rate_Territory__c": "DEFAULT",
+      "Rating_Tier__c": "EO",
+      "Monthly_Rate__c": 8.50,
+      "Effective_Date__c": "2025-01-01",
+      "Group_Size_Min__c": 2,
+      "Group_Size_Max__c": 99
+    },
+    {
+      "attributes": { "type": "DD_PlanRate__c", "referenceId": "RateRef10" },
+      "Plan__c": "@PlanRef5",
+      "Rate_Territory__c": "DEFAULT",
+      "Rating_Tier__c": "ES",
+      "Monthly_Rate__c": 14.90,
+      "Effective_Date__c": "2025-01-01",
+      "Group_Size_Min__c": 2,
+      "Group_Size_Max__c": 99
+    },
+    {
+      "attributes": { "type": "DD_PlanRate__c", "referenceId": "RateRef11" },
+      "Plan__c": "@PlanRef5",
+      "Rate_Territory__c": "DEFAULT",
+      "Rating_Tier__c": "EC",
+      "Monthly_Rate__c": 18.25,
+      "Effective_Date__c": "2025-01-01",
+      "Group_Size_Min__c": 2,
+      "Group_Size_Max__c": 99
+    },
+    {
+      "attributes": { "type": "DD_PlanRate__c", "referenceId": "RateRef12" },
+      "Plan__c": "@PlanRef5",
+      "Rate_Territory__c": "DEFAULT",
+      "Rating_Tier__c": "EF",
+      "Monthly_Rate__c": 22.40,
+      "Effective_Date__c": "2025-01-01",
+      "Group_Size_Min__c": 2,
+      "Group_Size_Max__c": 99
+    }
+  ]
+}

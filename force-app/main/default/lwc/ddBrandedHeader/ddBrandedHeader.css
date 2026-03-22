@@ -1,0 +1,64 @@
+:host { display: block; }
+.dd-header {
+    background: #1F4788;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+}
+.dd-header-inner {
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+    height: 56px;
+    gap: 2rem;
+}
+.dd-logo-block {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-shrink: 0;
+}
+.dd-logo-triangle { color: white; font-size: 1.2rem; }
+.dd-logo-wordmark {
+    color: white;
+    font-weight: 900;
+    font-size: 1.1rem;
+    letter-spacing: 1.5px;
+}
+.dd-logo-sub {
+    color: rgba(255,255,255,0.65);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    border-left: 1px solid rgba(255,255,255,0.3);
+    padding-left: 8px;
+    margin-left: 4px;
+}
+.dd-header-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex: 1;
+}
+.dd-nav-item {
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    padding: 0.4rem 0.85rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+.dd-nav-item:hover { background: rgba(255,255,255,0.15); color: white; }
+.dd-nav-active {
+    background: rgba(255,255,255,0.2) !important;
+    color: white !important;
+    font-weight: 700;
+}
+.dd-header-user {
+    margin-left: auto;
+    color: rgba(255,255,255,0.75);
+    font-size: 0.82rem;
+}
+.dd-header-stripe {
+    height: 3px;
+    background: linear-gradient(90deg, #C89B2A 0%, #F0C040 50%, #C89B2A 100%);
+}

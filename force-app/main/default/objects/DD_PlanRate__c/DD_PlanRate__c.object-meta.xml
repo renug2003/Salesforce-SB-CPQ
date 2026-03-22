@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Plan Rate</label>
+    <pluralLabel>Plan Rates</pluralLabel>
+    <nameField>
+        <label>Rate ID</label>
+        <type>AutoNumber</type>
+        <startingNumber>1</startingNumber>
+        <displayFormat>RATE-{000000}</displayFormat>
+    </nameField>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <sharingModel>ControlledByParent</sharingModel>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>false</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Plan__c</fullName>
+        <label>Plan</label>
+        <type>MasterDetail</type>
+        <referenceTo>DD_Plan__c</referenceTo>
+        <relationshipLabel>Plan Rates</relationshipLabel>
+        <relationshipName>Plan_Rates</relationshipName>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+        <inlineHelpText>Plan this rate applies to</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Rate_Territory__c</fullName>
+        <label>Rate Territory</label>
+        <type>Text</type>
+        <length>20</length>
+        <required>true</required>
+        <inlineHelpText>Rate territory code (derived from ZIP). Use DEFAULT for statewide rates.</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Rating_Tier__c</fullName>
+        <label>Rating Tier</label>
+        <type>Picklist</type>
+        <required>true</required>
+        <inlineHelpText>Coverage tier: EO=Employee Only, ES=Employee+Spouse, EC=Employee+Child(ren), EF=Employee+Family</inlineHelpText>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value><fullName>EO</fullName><label>Employee Only (EO)</label><default>false</default></value>
+                <value><fullName>ES</fullName><label>Employee + Spouse (ES)</label><default>false</default></value>
+                <value><fullName>EC</fullName><label>Employee + Child(ren) (EC)</label><default>false</default></value>
+                <value><fullName>EF</fullName><label>Employee + Family (EF)</label><default>false</default></value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Monthly_Rate__c</fullName>
+        <label>Monthly Rate</label>
+        <type>Currency</type>
+        <precision>8</precision>
+        <scale>2</scale>
+        <required>true</required>
+        <inlineHelpText>Monthly premium per subscriber for this tier and territory</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Employer_Contribution_Pct__c</fullName>
+        <label>Default Employer Contribution %</label>
+        <type>Percent</type>
+        <precision>5</precision>
+        <scale>1</scale>
+        <required>false</required>
+        <inlineHelpText>Suggested default employer contribution percentage for this rate</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Effective_Date__c</fullName>
+        <label>Rate Effective Date</label>
+        <type>Date</type>
+        <required>false</required>
+        <inlineHelpText>Date this rate becomes effective</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Expiration_Date__c</fullName>
+        <label>Rate Expiration Date</label>
+        <type>Date</type>
+        <required>false</required>
+        <inlineHelpText>Date this rate expires (leave blank for open-ended)</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Group_Size_Min__c</fullName>
+        <label>Group Size Minimum</label>
+        <type>Number</type>
+        <precision>3</precision>
+        <scale>0</scale>
+        <required>false</required>
+        <inlineHelpText>Minimum group size this rate applies to</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Group_Size_Max__c</fullName>
+        <label>Group Size Maximum</label>
+        <type>Number</type>
+        <precision>3</precision>
+        <scale>0</scale>
+        <required>false</required>
+        <inlineHelpText>Maximum group size this rate applies to</inlineHelpText>
+    </fields>
+</CustomObject>

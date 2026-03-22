@@ -1,0 +1,193 @@
+<template>
+    <div class="dd-contract-manager">
+        <!-- Header -->
+        <div class="ddcm-header">
+            <div class="ddcm-header-left">
+                <h1>&#128196; Contract Manager</h1>
+                <template if:true={contract}>
+                    <span class={statusBadgeClass}>{contract.Status__c}</span>
+                </template>
+            </div>
+            <div class="ddcm-header-actions">
+                <template if:true={canSign}>
+                    <button class="dd-btn dd-btn-gold" onclick={openSignModal}>
+                        &#9998; Sign Contract
+                    </button>
+                </template>
+                <template if:true={canTerminate}>
+                    <button class="dd-btn dd-btn-danger" onclick={openTerminateModal}>
+                        Terminate
+                    </button>
+                </template>
+            </div>
+        </div>
+
+        <template if:true={isLoading}>
+            <div class="ddcm-loading">
+                <lightning-spinner alternative-text="Loading contract..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:true={contract}>
+            <!-- Contract Details Cards -->
+            <div class="ddcm-grid">
+
+                <!-- Key Details -->
+                <div class="ddcm-card">
+                    <div class="ddcm-card-title">Contract Details</div>
+                    <div class="ddcm-field-list">
+                        <div class="ddcm-field">
+                            <span class="ddcm-label">Contract Number</span>
+                            <span class="ddcm-value ddcm-mono">{contract.Name}</span>
+                        </div>
+                        <div class="ddcm-field">
+                            <span class="ddcm-label">Employer</span>
+                            <span class="ddcm-value">{contract.Employer__r.Name}</span>
+                        </div>
+                        <div class="ddcm-field">
+                            <span class="ddcm-label">Start Date</span>
+                            <span class="ddcm-value">{startDateDisplay}</span>
+                        </div>
+                        <div class="ddcm-field">
+                            <span class="ddcm-label">End Date</span>
+                            <span class="ddcm-value">{endDateDisplay}</span>
+                        </div>
+                        <div class="ddcm-field">
+                            <span class="ddcm-label">Annual Premium</span>
+                            <span class="ddcm-value ddcm-premium">${contract.Total_Annual_Premium__c}</span>
+                        </div>
+                        <div class="ddcm-field">
+                            <span class="ddcm-label">Auto-Renew</span>
+                            <span class="ddcm-value">
+                                <template if:true={contract.Auto_Renew__c}>&#9989; Yes</template>
+                                <template if:false={contract.Auto_Renew__c}>&#10060; No</template>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Signature Status -->
+                <div class="ddcm-card">
+                    <div class="ddcm-card-title">Signature Status</div>
+                    <template if:true={contract.Is_Signed__c}>
+                        <div class="ddcm-signed-block">
+                            <div class="ddcm-signed-icon">&#10004;</div>
+                            <div class="ddcm-signed-details">
+                                <div class="ddcm-signed-name">{contract.Signed_By_Name__c}</div>
+                                <div class="ddcm-signed-title">{contract.Signed_By_Title__c}</div>
+                                <div class="ddcm-signed-date">Signed {signedDateDisplay}</div>
+                            </div>
+                        </div>
+                    </template>
+                    <template if:false={contract.Is_Signed__c}>
+                        <div class="ddcm-unsigned-block">
+                            <div class="ddcm-unsigned-icon">&#9998;</div>
+                            <p>Awaiting employer signature</p>
+                            <template if:true={canSign}>
+                                <button class="dd-btn dd-btn-gold" onclick={openSignModal}>
+                                    Record Signature
+                                </button>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Timeline -->
+                <div class="ddcm-card ddcm-card-full">
+                    <div class="ddcm-card-title">Contract Lifecycle</div>
+                    <div class="ddcm-timeline">
+                        <div class={timelineStepDraft}>
+                            <div class="ddcm-tl-dot"></div>
+                            <div class="ddcm-tl-content">
+                                <div class="ddcm-tl-label">Draft Created</div>
+                            </div>
+                        </div>
+                        <div class={timelineStepPendingSignature}>
+                            <div class="ddcm-tl-dot"></div>
+                            <div class="ddcm-tl-content">
+                                <div class="ddcm-tl-label">Pending Signature</div>
+                            </div>
+                        </div>
+                        <div class={timelineStepApproved}>
+                            <div class="ddcm-tl-dot"></div>
+                            <div class="ddcm-tl-content">
+                                <div class="ddcm-tl-label">Approved</div>
+                                <template if:true={contract.Signed_Date__c}>
+                                    <div class="ddcm-tl-date">Signed {signedDateDisplay}</div>
+                                </template>
+                            </div>
+                        </div>
+                        <div class={timelineStepActive}>
+                            <div class="ddcm-tl-dot"></div>
+                            <div class="ddcm-tl-content">
+                                <div class="ddcm-tl-label">Active</div>
+                                <div class="ddcm-tl-date">Effective {startDateDisplay}</div>
+                            </div>
+                        </div>
+                        <div class={timelineStepExpired}>
+                            <div class="ddcm-tl-dot"></div>
+                            <div class="ddcm-tl-content">
+                                <div class="ddcm-tl-label">Expired / Renewed</div>
+                                <div class="ddcm-tl-date">Ends {endDateDisplay}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </template>
+
+        <!-- Sign Contract Modal -->
+        <template if:true={showSignModal}>
+            <div class="ddcm-modal-overlay" onclick={closeSignModal}>
+                <div class="ddcm-modal" onclick={stopPropagation}>
+                    <div class="ddcm-modal-header">
+                        <h2>&#9998; Record Contract Signature</h2>
+                        <button class="ddcm-modal-close" onclick={closeSignModal}>&#x2715;</button>
+                    </div>
+                    <div class="ddcm-modal-body">
+                        <p class="ddcm-modal-note">
+                            Phase 1: Record that the employer has signed the contract.
+                            Future phases will include DocuSign e-signature integration.
+                        </p>
+                        <div class="dd-form-grid">
+                            <div class="dd-form-field dd-field-full">
+                                <label class="dd-label dd-required">Authorized Signer Full Name</label>
+                                <input type="text"
+                                       class="dd-input"
+                                       placeholder="e.g. Jane Smith"
+                                       value={signerName}
+                                       onchange={handleSignerNameChange} />
+                            </div>
+                            <div class="dd-form-field dd-field-full">
+                                <label class="dd-label dd-required">Signer Title</label>
+                                <input type="text"
+                                       class="dd-input"
+                                       placeholder="e.g. Chief Executive Officer"
+                                       value={signerTitle}
+                                       onchange={handleSignerTitleChange} />
+                            </div>
+                            <div class="dd-form-field dd-field-full">
+                                <label class="dd-label dd-required">Date Signed</label>
+                                <input type="date"
+                                       class="dd-input"
+                                       value={signedDate}
+                                       max={todayISO}
+                                       onchange={handleSignedDateChange} />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ddcm-modal-footer">
+                        <button class="dd-btn dd-btn-secondary" onclick={closeSignModal}>Cancel</button>
+                        <button class="dd-btn dd-btn-gold"
+                                onclick={handleConfirmSign}
+                                disabled={signFormInvalid}>
+                            &#10003; Confirm Signature
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+    </div>
+</template>

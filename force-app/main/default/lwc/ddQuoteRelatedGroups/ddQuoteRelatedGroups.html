@@ -1,0 +1,33 @@
+<template>
+    <lightning-card title="Related Groups" icon-name="standard:groups">
+        <template if:true={isLoading}>
+            <div class="slds-align_absolute-center slds-p-around_medium">
+                <lightning-spinner alternative-text="Loading groups..." size="small"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <template if:true={hasGroups}>
+                <lightning-datatable
+                    key-field="Id"
+                    data={groups}
+                    columns={columns}
+                    hide-checkbox-column
+                    class="slds-p-horizontal_small">
+                </lightning-datatable>
+            </template>
+
+            <template if:false={hasGroups}>
+                <div class="empty-state slds-p-around_medium slds-align_absolute-center">
+                    <p class="slds-text-color_weak">No groups have been created from this quote yet.</p>
+                </div>
+            </template>
+
+            <template if:true={error}>
+                <div class="slds-p-around_small">
+                    <p class="slds-text-color_error">{error}</p>
+                </div>
+            </template>
+        </template>
+    </lightning-card>
+</template>

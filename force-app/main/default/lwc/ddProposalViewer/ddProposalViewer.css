@@ -1,0 +1,77 @@
+:host { display: block; font-family: 'Helvetica Neue', Arial, sans-serif; color: #222; }
+.ddpv-container { max-width: 800px; margin: 0 auto; }
+
+/* Cover Page */
+.ddpv-cover { background: linear-gradient(160deg, #1F4788 0%, #2E6DB4 60%, #1F4788 100%); color: white; min-height: 100vh; display: flex; flex-direction: column; padding: 3rem; page-break-after: always; }
+.ddpv-cover-logo { display: flex; align-items: baseline; gap: 8px; margin-bottom: auto; }
+.ddpv-logo-tri { font-size: 1.8rem; }
+.ddpv-logo-wm { font-size: 1.4rem; font-weight: 900; letter-spacing: 2px; }
+.ddpv-logo-sub { font-size: 0.85rem; opacity: 0.75; border-left: 1px solid rgba(255,255,255,0.4); padding-left: 10px; margin-left: 4px; letter-spacing: 1px; }
+.ddpv-cover-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.ddpv-cover-label { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 3px; opacity: 0.75; margin-bottom: 1rem; }
+.ddpv-cover-employer { font-size: 2.5rem; font-weight: 800; margin: 0 0 2rem; line-height: 1.2; }
+.ddpv-cover-meta { background: rgba(255,255,255,0.12); border-radius: 10px; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.6rem; max-width: 420px; }
+.ddpv-cover-meta-row { display: flex; justify-content: space-between; font-size: 0.9rem; }
+.ddpv-meta-label { opacity: 0.75; }
+.ddpv-meta-val { font-weight: 700; }
+.ddpv-cover-footer { font-size: 0.72rem; opacity: 0.6; text-align: center; margin-top: 2rem; line-height: 1.6; }
+
+/* Content Pages */
+.ddpv-page { padding: 2rem; min-height: 100vh; page-break-after: always; background: white; }
+.ddpv-page-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 3px solid #1F4788; }
+.ddpv-section-num { width: 36px; height: 36px; border-radius: 50%; background: #1F4788; color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; flex-shrink: 0; }
+.ddpv-page-header h2 { font-size: 1.4rem; color: #1F4788; margin: 0; font-weight: 700; }
+.ddpv-intro { font-size: 0.9rem; color: #444; line-height: 1.6; margin-bottom: 1.5rem; }
+
+/* Summary Boxes */
+.ddpv-summary-boxes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-bottom: 1.5rem; }
+.ddpv-sum-box { border-radius: 8px; padding: 1rem; text-align: center; }
+.ddpv-sum-total { background: #1F4788; color: white; }
+.ddpv-sum-employer { background: #2E6DB4; color: white; }
+.ddpv-sum-employee { background: #5B9BD5; color: white; }
+.ddpv-sum-annual { background: #C89B2A; color: white; }
+.ddpv-sum-label { font-size: 0.68rem; opacity: 0.85; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+.ddpv-sum-amount { font-size: 1.3rem; font-weight: 800; }
+.ddpv-sum-sub { font-size: 0.68rem; opacity: 0.8; margin-top: 3px; }
+
+/* Plans Overview Table */
+.ddpv-plans-table, .ddpv-rate-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 1.5rem; }
+.ddpv-plans-table th, .ddpv-rate-table th { background: #1F4788; color: white; padding: 0.6rem 0.85rem; text-align: left; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.ddpv-plans-table td, .ddpv-rate-table td { padding: 0.55rem 0.85rem; border-bottom: 1px solid #E8EEF4; color: #333; }
+.ddpv-plans-table tbody tr:hover, .ddpv-rate-table tbody tr:hover { background: #F5F8FC; }
+.ddpv-plan-name-cell { font-weight: 600; color: #1F4788; }
+.ddpv-amt-cell { font-weight: 700; color: #1F4788; }
+.ddpv-total-row td, .ddpv-rate-total td { background: #1F4788 !important; color: white !important; }
+
+/* Key Facts */
+.ddpv-key-facts { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.75rem; margin-bottom: 1.25rem; }
+.ddpv-fact { background: #F0F3F8; border-radius: 6px; padding: 0.75rem; text-align: center; }
+.ddpv-fact-label { font-size: 0.65rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.ddpv-fact-val { font-size: 0.9rem; font-weight: 700; color: #1F4788; }
+
+/* Coinsurance */
+.ddpv-coins-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.ddpv-coins-box { border-radius: 10px; padding: 1.25rem; text-align: center; color: white; }
+.ddpv-preventive { background: #1B7A3E; }
+.ddpv-basic { background: #2E6DB4; }
+.ddpv-major { background: #1F4788; }
+.ddpv-coins-pct { font-size: 2rem; font-weight: 900; }
+.ddpv-coins-lbl { font-size: 0.75rem; opacity: 0.9; margin-top: 4px; line-height: 1.4; }
+.ddpv-section-sub { font-size: 0.9rem; font-weight: 700; color: #1F4788; text-transform: uppercase; letter-spacing: 0.5px; margin: 1.25rem 0 0.5rem; border-bottom: 2px solid #DEEAF1; padding-bottom: 4px; }
+
+/* Signature Page */
+.ddpv-terms-text { font-size: 0.82rem; color: #555; line-height: 1.7; margin-bottom: 2rem; padding: 1rem; background: #F8FAFD; border-left: 4px solid #1F4788; border-radius: 0 4px 4px 0; }
+.ddpv-sig-block { display: grid; grid-template-columns: 2fr 2fr 1fr; gap: 2rem; margin-bottom: 3rem; }
+.ddpv-sig-field { display: flex; flex-direction: column; gap: 8px; }
+.ddpv-sig-line { border-bottom: 2px solid #333; height: 48px; }
+.ddpv-sig-label { font-size: 0.72rem; color: #888; }
+.ddpv-page-footer { border-top: 2px solid #1F4788; padding-top: 1rem; }
+.ddpv-footer-logo { font-size: 0.9rem; font-weight: 700; color: #1F4788; margin-bottom: 0.5rem; }
+.ddpv-footer-disc { font-size: 0.68rem; color: #999; line-height: 1.5; }
+
+/* Print Styles */
+@media print {
+    .ddpv-cover, .ddpv-page { page-break-after: always; }
+    .ddpv-page:last-child { page-break-after: auto; }
+    body { margin: 0; }
+}

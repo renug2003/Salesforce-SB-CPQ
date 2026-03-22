@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Plan</label>
+    <pluralLabel>Plans</pluralLabel>
+    <nameField>
+        <label>Plan Name</label>
+        <type>Text</type>
+    </nameField>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <sharingModel>Read</sharingModel>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Plan_Code__c</fullName>
+        <label>Plan Code</label>
+        <type>Text</type>
+        <length>20</length>
+        <required>true</required>
+        <unique>true</unique>
+        <caseSensitive>false</caseSensitive>
+        <trackHistory>true</trackHistory>
+        <inlineHelpText>Unique identifier for this plan in DDCA systems</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Plan_Type__c</fullName>
+        <label>Plan Type</label>
+        <type>Picklist</type>
+        <required>true</required>
+        <trackHistory>true</trackHistory>
+        <inlineHelpText>Type of insurance plan</inlineHelpText>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value><fullName>PPO</fullName><label>PPO</label><default>false</default></value>
+                <value><fullName>HMO</fullName><label>HMO</label><default>false</default></value>
+                <value><fullName>DeltaCare</fullName><label>DeltaCare USA</label><default>false</default></value>
+                <value><fullName>Vision</fullName><label>Vision</label><default>false</default></value>
+                <value><fullName>Indemnity</fullName><label>Indemnity</label><default>false</default></value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Product_Line__c</fullName>
+        <label>Product Line</label>
+        <type>Picklist</type>
+        <required>true</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Whether this is a Dental or Vision product</inlineHelpText>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value><fullName>Dental</fullName><label>Dental</label><default>true</default></value>
+                <value><fullName>Vision</fullName><label>Vision</label><default>false</default></value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Network__c</fullName>
+        <label>Network</label>
+        <type>Picklist</type>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Provider network associated with this plan</inlineHelpText>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value><fullName>Delta Premier</fullName><label>Delta Premier</label><default>false</default></value>
+                <value><fullName>Delta PPO</fullName><label>Delta PPO</label><default>false</default></value>
+                <value><fullName>DeltaCare</fullName><label>DeltaCare USA</label><default>false</default></value>
+                <value><fullName>VSP</fullName><label>VSP Vision</label><default>false</default></value>
+                <value><fullName>Out of Network</fullName><label>Out of Network</label><default>false</default></value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Deductible_Individual__c</fullName>
+        <label>Deductible (Individual)</label>
+        <type>Currency</type>
+        <precision>8</precision>
+        <scale>2</scale>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Annual deductible per individual member</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Deductible_Family__c</fullName>
+        <label>Deductible (Family)</label>
+        <type>Currency</type>
+        <precision>8</precision>
+        <scale>2</scale>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Annual deductible per family</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Annual_Maximum__c</fullName>
+        <label>Annual Maximum</label>
+        <type>Currency</type>
+        <precision>8</precision>
+        <scale>2</scale>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Maximum annual benefit per individual member</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Ortho_Lifetime_Max__c</fullName>
+        <label>Orthodontia Lifetime Maximum</label>
+        <type>Currency</type>
+        <precision>8</precision>
+        <scale>2</scale>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Lifetime maximum benefit for orthodontia services</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Waiting_Period__c</fullName>
+        <label>Waiting Period</label>
+        <type>Picklist</type>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Waiting period before certain benefits become available</inlineHelpText>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value><fullName>None</fullName><label>None</label><default>true</default></value>
+                <value><fullName>6 Months</fullName><label>6 Months</label><default>false</default></value>
+                <value><fullName>12 Months</fullName><label>12 Months</label><default>false</default></value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Segment_Eligibility__c</fullName>
+        <label>Segment Eligibility</label>
+        <type>MultiselectPicklist</type>
+        <visibleLines>4</visibleLines>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Market segments this plan is available for</inlineHelpText>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value><fullName>Small Business</fullName><label>Small Business</label><default>false</default></value>
+                <value><fullName>Large Group</fullName><label>Large Group</label><default>false</default></value>
+                <value><fullName>Individual</fullName><label>Individual</label><default>false</default></value>
+                <value><fullName>Medicare</fullName><label>Medicare</label><default>false</default></value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Effective_Start__c</fullName>
+        <label>Effective Start Date</label>
+        <type>Date</type>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <inlineHelpText>Date this plan becomes available for quoting</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Effective_End__c</fullName>
+        <label>Effective End Date</label>
+        <type>Date</type>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <inlineHelpText>Date this plan is no longer available for new quotes (leave blank for open-ended)</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Is_Active__c</fullName>
+        <label>Is Active</label>
+        <type>Checkbox</type>
+        <defaultValue>true</defaultValue>
+        <trackHistory>true</trackHistory>
+        <inlineHelpText>Uncheck to remove plan from quoting without deleting</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Sort_Order__c</fullName>
+        <label>Sort Order</label>
+        <type>Number</type>
+        <precision>3</precision>
+        <scale>0</scale>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Display order in plan selector (lower number = shown first)</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Description__c</fullName>
+        <label>Description</label>
+        <type>LongTextArea</type>
+        <length>32768</length>
+        <visibleLines>5</visibleLines>
+        <required>false</required>
+        <inlineHelpText>Internal description of the plan</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Highlights__c</fullName>
+        <label>Plan Highlights</label>
+        <type>Html</type>
+        <length>32768</length>
+        <visibleLines>10</visibleLines>
+        <required>false</required>
+        <inlineHelpText>Marketing highlights displayed in proposals and plan selector</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Coinsurance_Preventive__c</fullName>
+        <label>Preventive Coinsurance</label>
+        <type>Percent</type>
+        <precision>5</precision>
+        <scale>0</scale>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Plan pays this percentage for preventive services (in-network)</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Coinsurance_Basic__c</fullName>
+        <label>Basic Coinsurance</label>
+        <type>Percent</type>
+        <precision>5</precision>
+        <scale>0</scale>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Plan pays this percentage for basic services (in-network)</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Coinsurance_Major__c</fullName>
+        <label>Major Coinsurance</label>
+        <type>Percent</type>
+        <precision>5</precision>
+        <scale>0</scale>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Plan pays this percentage for major services (in-network)</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Coinsurance_Ortho__c</fullName>
+        <label>Orthodontia Coinsurance</label>
+        <type>Percent</type>
+        <precision>5</precision>
+        <scale>0</scale>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Plan pays this percentage for orthodontia (if covered)</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Ortho_Covered__c</fullName>
+        <label>Orthodontia Covered</label>
+        <type>Checkbox</type>
+        <defaultValue>false</defaultValue>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Check if orthodontia is a covered benefit</inlineHelpText>
+    </fields>
+    <searchLayouts>
+        <searchResultsAdditionalFields>Plan_Code__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Plan_Type__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Product_Line__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Is_Active__c</searchResultsAdditionalFields>
+    </searchLayouts>
+</CustomObject>

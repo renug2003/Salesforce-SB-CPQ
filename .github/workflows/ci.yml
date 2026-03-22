@@ -1,0 +1,53 @@
+name: Salesforce CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  validate:
+    name: Validate Metadata
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Install Salesforce CLI
+        run: npm install --global @salesforce/cli@latest
+
+      - name: Authenticate to org (JWT)
+        run: |
+          sf org login jwt \
+            --username ${{ secrets.SF_USERNAME }} \
+            --jwt-key-file <(echo "${{ secrets.SF_JWT_KEY }}") \
+            --client-id ${{ secrets.SF_CLIENT_ID }} \
+            --instance-url ${{ secrets.SF_INSTANCE_URL }} \
+            --alias ci-org --set-default
+
+      - name: Validate deployment (check-only, run all tests)
+        run: |
+          sf project deploy start \
+            --source-dir force-app \
+            --target-org ci-org \
+            --dry-run \
+            --test-level RunLocalTests \
+            --verbose
+
+      - name: Report test results
+        if: always()
+        run: |
+          sf apex run test \
+            --target-org ci-org \
+            --code-coverage \
+            --result-format human \
+            --output-dir test-results
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: apex-test-results
+          path: test-results/

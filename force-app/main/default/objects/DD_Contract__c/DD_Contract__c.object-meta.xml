@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Contract</label>
+    <pluralLabel>Contracts</pluralLabel>
+    <nameField>
+        <label>Contract Number</label>
+        <type>AutoNumber</type>
+        <startingNumber>1</startingNumber>
+        <displayFormat>CTR-{000000}</displayFormat>
+    </nameField>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <sharingModel>ReadWrite</sharingModel>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Group__c</fullName>
+        <label>Group</label>
+        <type>Lookup</type>
+        <referenceTo>DD_Group__c</referenceTo>
+        <relationshipLabel>Contracts</relationshipLabel>
+        <relationshipName>Contracts</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <inlineHelpText>Enrolled group associated with this contract</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Employer__c</fullName>
+        <label>Employer</label>
+        <type>Lookup</type>
+        <referenceTo>DD_Employer__c</referenceTo>
+        <relationshipLabel>Contracts</relationshipLabel>
+        <relationshipName>Contracts</relationshipName>
+        <deleteConstraint>Restrict</deleteConstraint>
+        <required>true</required>
+        <trackHistory>true</trackHistory>
+        <inlineHelpText>Employer this contract is with</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Quote__c</fullName>
+        <label>Source Quote</label>
+        <type>Lookup</type>
+        <referenceTo>DD_Quote__c</referenceTo>
+        <relationshipLabel>Contract</relationshipLabel>
+        <relationshipName>Contract</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Quote that originated this contract</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <label>Status</label>
+        <type>Picklist</type>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <inlineHelpText>Current lifecycle status of the contract</inlineHelpText>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value><fullName>Draft</fullName><label>Draft</label><default>true</default></value>
+                <value><fullName>Pending Signature</fullName><label>Pending Signature</label><default>false</default></value>
+                <value><fullName>Approved</fullName><label>Approved</label><default>false</default></value>
+                <value><fullName>Active</fullName><label>Active</label><default>false</default></value>
+                <value><fullName>Expired</fullName><label>Expired</label><default>false</default></value>
+                <value><fullName>Terminated</fullName><label>Terminated</label><default>false</default></value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Start_Date__c</fullName>
+        <label>Contract Start Date</label>
+        <type>Date</type>
+        <required>true</required>
+        <trackHistory>true</trackHistory>
+        <inlineHelpText>Date coverage begins under this contract</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>End_Date__c</fullName>
+        <label>Contract End Date</label>
+        <type>Date</type>
+        <required>true</required>
+        <trackHistory>true</trackHistory>
+        <inlineHelpText>Date coverage ends under this contract (typically 1 year from start)</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Is_Signed__c</fullName>
+        <label>Is Signed</label>
+        <type>Checkbox</type>
+        <defaultValue>false</defaultValue>
+        <trackHistory>true</trackHistory>
+        <inlineHelpText>Check when the employer has signed the contract (Phase 1: manual signature confirmation)</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Signed_Date__c</fullName>
+        <label>Date Signed</label>
+        <type>Date</type>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <inlineHelpText>Date the employer signed the contract</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Signed_By_Name__c</fullName>
+        <label>Signed By (Name)</label>
+        <type>Text</type>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Full name of the authorized signer</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Signed_By_Title__c</fullName>
+        <label>Signed By (Title)</label>
+        <type>Text</type>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Title of the authorized signer</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Auto_Renew__c</fullName>
+        <label>Auto-Renew</label>
+        <type>Checkbox</type>
+        <defaultValue>true</defaultValue>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>If checked, system will prompt for renewal 60 days before expiration</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Termination_Date__c</fullName>
+        <label>Termination Date</label>
+        <type>Date</type>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <inlineHelpText>Date coverage was terminated (only set for early terminations)</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Termination_Reason__c</fullName>
+        <label>Termination Reason</label>
+        <type>Picklist</type>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Reason for early contract termination</inlineHelpText>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value><fullName>Non-Payment</fullName><label>Non-Payment</label><default>false</default></value>
+                <value><fullName>Voluntary Cancellation</fullName><label>Voluntary Cancellation</label><default>false</default></value>
+                <value><fullName>Group Dissolved</fullName><label>Group Dissolved</label><default>false</default></value>
+                <value><fullName>Moved Out of Service Area</fullName><label>Moved Out of Service Area</label><default>false</default></value>
+                <value><fullName>Switched Carrier</fullName><label>Switched Carrier</label><default>false</default></value>
+                <value><fullName>Other</fullName><label>Other</label><default>false</default></value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Total_Annual_Premium__c</fullName>
+        <label>Total Annual Premium</label>
+        <type>Currency</type>
+        <precision>12</precision>
+        <scale>2</scale>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Total annual premium amount under this contract</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Notes__c</fullName>
+        <label>Notes</label>
+        <type>LongTextArea</type>
+        <length>32768</length>
+        <visibleLines>5</visibleLines>
+        <required>false</required>
+        <inlineHelpText>Internal notes about this contract</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Days_Until_Expiration__c</fullName>
+        <label>Days Until Expiration</label>
+        <type>Number</type>
+        <formula>End_Date__c - TODAY()</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <precision>5</precision>
+        <scale>0</scale>
+        <inlineHelpText>Number of days until contract expiration (negative = already expired)</inlineHelpText>
+    </fields>
+    <searchLayouts>
+        <searchResultsAdditionalFields>Employer__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Status__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Start_Date__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>End_Date__c</searchResultsAdditionalFields>
+    </searchLayouts>
+</CustomObject>

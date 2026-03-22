@@ -1,0 +1,545 @@
+<apex:page controller="DD_ContractPDFController"
+    renderAs="pdf"
+    applyHtmlTag="false"
+    showHeader="false"
+    sidebar="false"
+    standardStylesheets="false">
+<html>
+<head>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Arial, Helvetica, sans-serif; font-size: 9pt; color: #222; background: #fff; }
+
+  /* ── HEADER ── */
+  .header { background: #006B3C; padding: 16px 24px; }
+  .header-table { width: 100%; border-collapse: collapse; }
+  .header-logo-cell { vertical-align: middle; width: 55%; }
+  .header-title-cell { vertical-align: middle; width: 45%; text-align: right; }
+  .logo-triangle { color: #8BC34A; font-size: 20pt; margin-right: 4px; }
+  .logo-name { font-size: 13pt; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
+  .logo-state { display: block; font-size: 8pt; color: rgba(255,255,255,0.8); font-weight: 400; margin-top: 1px; }
+  .doc-title { font-size: 15pt; font-weight: 700; color: #fff; }
+  .doc-sub { font-size: 8pt; color: rgba(255,255,255,0.85); margin-top: 4px; }
+
+  /* ── ACCENT BAR ── */
+  .accent-bar { background: #8BC34A; height: 5px; }
+
+  /* ── SECTION ── */
+  .section { margin: 12px 24px; }
+  .section-title {
+    font-size: 8pt; font-weight: 800; color: #006B3C;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    border-bottom: 2px solid #006B3C; padding-bottom: 4px; margin-bottom: 8px;
+  }
+
+  /* ── INFO GRID ── */
+  .info-table { width: 100%; border-collapse: collapse; }
+  .info-table td { padding: 4px 6px; vertical-align: top; width: 25%; }
+  .info-label { font-size: 7pt; color: #666; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 2px; }
+  .info-value { font-size: 9pt; color: #111; font-weight: 600; }
+
+  /* ── BENEFIT TABLE ── */
+  .benefit-plan-header {
+    background: #006B3C; color: #fff; padding: 8px 12px;
+    font-size: 10pt; font-weight: 700; margin: 14px 24px 0;
+  }
+  .benefit-plan-sub {
+    background: #E8F5E9; padding: 5px 12px; margin: 0 24px;
+    font-size: 7.5pt; color: #444; border-bottom: 1px solid #c8e6c9;
+  }
+  .benefit-tbl { width: calc(100% - 48px); margin: 0 24px; border-collapse: collapse; font-size: 8.5pt; }
+  .benefit-tbl th {
+    background: #2E7D32; color: #fff; padding: 6px 8px;
+    text-align: left; font-size: 7.5pt; text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  .benefit-tbl th.ct { text-align: center; }
+  .benefit-tbl td { padding: 5px 8px; border-bottom: 1px solid #E8F5E9; }
+  .benefit-tbl td.ct { text-align: center; }
+  .benefit-tbl tr:nth-child(even) td { background: #F9FFF9; }
+  .benefit-tbl tr.cat-header td {
+    background: #C8E6C9; font-weight: 700; font-size: 8pt; color: #1B5E20;
+  }
+  .benefit-tbl tr.deduct-row td { background: #F1F8F1; }
+  .pct-in { color: #1B5E20; font-weight: 700; }
+  .pct-out { color: #555; }
+  .note-text { font-size: 7.5pt; color: #666; font-style: italic; }
+
+  /* ── RATE TABLE ── */
+  .rate-tbl { width: calc(100% - 48px); margin: 8px 24px 0; border-collapse: collapse; font-size: 8.5pt; }
+  .rate-tbl th {
+    background: #006B3C; color: #fff; padding: 6px 8px;
+    text-align: left; font-size: 7.5pt; text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  .rate-tbl th.rt { text-align: right; }
+  .rate-tbl td { padding: 5px 8px; border-bottom: 1px solid #E8F5E9; }
+  .rate-tbl td.rt { text-align: right; }
+  .rate-tbl tr:nth-child(even) td { background: #F9FFF9; }
+  .rate-tbl tr.plan-total td {
+    background: #E8F5E9; font-weight: 700; border-top: 2px solid #006B3C;
+  }
+  .emp-cost { color: #2E7D32; font-weight: 700; }
+
+  /* ── PREMIUM BOX ── */
+  .prem-table { width: 100%; border-collapse: separate; border-spacing: 5px; }
+  .prem-table td { padding: 10px; text-align: center; border-radius: 4px; }
+  .prem-total { background: #006B3C; color: #fff; }
+  .prem-annual { background: #C89B2A; color: #fff; }
+  .prem-label { font-size: 7pt; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 5px; opacity: 0.9; }
+  .prem-amount { font-size: 13pt; font-weight: 800; }
+
+  /* ── PROVISIONS ── */
+  .provisions-box {
+    background: #F9FFF9; border: 1px solid #C8E6C9;
+    padding: 10px 14px; font-size: 8pt; color: #333; margin: 0 24px 12px;
+    line-height: 1.6;
+  }
+  .provisions-box p { margin-bottom: 6px; }
+  .provisions-box strong { color: #006B3C; }
+
+  /* ── NOTES ── */
+  .notes-box {
+    background: #F9FFF9; border-left: 4px solid #8BC34A;
+    padding: 8px 12px; font-size: 8.5pt; color: #444; margin: 0 24px 12px;
+  }
+
+  /* ── SIGNATURE ── */
+  .sig-table { width: 100%; border-collapse: collapse; }
+  .sig-table td { padding: 6px 10px; vertical-align: bottom; }
+  .sig-line { border-bottom: 1px solid #444; height: 32px; }
+  .sig-label { font-size: 7.5pt; color: #666; margin-top: 4px; }
+
+  /* ── FOOTER ── */
+  .footer { margin: 8px 24px 0; border-top: 1px solid #ccc; padding-top: 8px; }
+  .footer-legal { font-size: 7pt; color: #777; line-height: 1.5; }
+  .footer-ref { font-size: 7pt; color: #aaa; margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <table class="header-table">
+    <tr>
+      <td class="header-logo-cell">
+        <span class="logo-triangle">&#9651;</span><span class="logo-name">DELTA DENTAL</span>
+        <span class="logo-state">of California</span>
+      </td>
+      <td class="header-title-cell">
+        <div class="doc-title">Group Dental Contract</div>
+        <div class="doc-sub">
+          Group #<apex:outputText value="{!grp.Name}"/> &bull;
+          Issued <apex:outputText value="{!todayFormatted}"/>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+<div class="accent-bar"></div>
+
+<!-- GROUP &amp; EMPLOYER INFORMATION -->
+<div class="section">
+  <div class="section-title">Employer &amp; Group Information</div>
+  <table class="info-table">
+    <tr>
+      <td>
+        <div class="info-label">Employer / Policyholder</div>
+        <div class="info-value"><apex:outputText value="{!grp.Employer__r.Name}"/></div>
+      </td>
+      <td>
+        <div class="info-label">DBA Name</div>
+        <div class="info-value">
+          <apex:outputText value="{!IF(ISBLANK(grp.Employer__r.DBA_Name__c),'—',grp.Employer__r.DBA_Name__c)}"/>
+        </div>
+      </td>
+      <td>
+        <div class="info-label">Group Number</div>
+        <div class="info-value"><apex:outputText value="{!grp.Name}"/></div>
+      </td>
+      <td>
+        <div class="info-label">Group Name</div>
+        <div class="info-value">
+          <apex:outputText value="{!IF(ISBLANK(grp.Group_Name__c),'—',grp.Group_Name__c)}"/>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="info-label">Coverage Start Date</div>
+        <div class="info-value"><apex:outputText value="{!effectiveDateFormatted}"/></div>
+      </td>
+      <td>
+        <div class="info-label">Coverage End Date</div>
+        <div class="info-value"><apex:outputText value="{!endDateFormatted}"/></div>
+      </td>
+      <td>
+        <div class="info-label">Total Enrolled</div>
+        <div class="info-value">
+          <apex:outputText value="{!TEXT(grp.Total_Enrolled__c)}"/>
+        </div>
+      </td>
+      <td>
+        <div class="info-label">SIC Code</div>
+        <div class="info-value">
+          <apex:outputText value="{!IF(ISBLANK(grp.SIC_Code__c),'—',grp.SIC_Code__c)}"/>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="info-label">Billing ZIP Code</div>
+        <div class="info-value">
+          <apex:outputText value="{!IF(ISBLANK(grp.Employer__r.Billing_ZIP__c),'—',grp.Employer__r.Billing_ZIP__c)}"/>
+        </div>
+      </td>
+      <td>
+        <div class="info-label">Billing Method</div>
+        <div class="info-value">
+          <apex:outputText value="{!IF(ISBLANK(grp.Billing_Method__c),'—',grp.Billing_Method__c)}"/>
+        </div>
+      </td>
+      <td>
+        <div class="info-label">Source Quote</div>
+        <div class="info-value">
+          <apex:outputText value="{!IF(grp.Source_Quote__c = null,'—',grp.Source_Quote__r.Name)}"/>
+        </div>
+      </td>
+      <td>
+        <div class="info-label">Issued Date</div>
+        <div class="info-value"><apex:outputText value="{!todayFormatted}"/></div>
+      </td>
+    </tr>
+    <apex:outputPanel layout="block" rendered="{!hasBroker}">
+    <tr>
+      <td>
+        <div class="info-label">Broker / Producer</div>
+        <div class="info-value"><apex:outputText value="{!grp.Source_Quote__r.Broker_Account__r.Name}"/></div>
+      </td>
+      <td>
+        <div class="info-label">Broker Phone</div>
+        <div class="info-value">
+          <apex:outputText value="{!IF(ISBLANK(grp.Source_Quote__r.Broker_Account__r.Phone),'—',grp.Source_Quote__r.Broker_Account__r.Phone)}"/>
+        </div>
+      </td>
+      <td></td><td></td>
+    </tr>
+    </apex:outputPanel>
+  </table>
+</div>
+
+<!-- PREMIUM SUMMARY -->
+<div class="section">
+  <div class="section-title">Premium Summary</div>
+  <table class="prem-table">
+    <tr>
+      <td class="prem-total">
+        <div class="prem-label">Total Annual Premium</div>
+        <div class="prem-amount">
+          $<apex:outputText value="{0, number, #,##0.00}">
+            <apex:param value="{!totalAnnualPremium}"/>
+          </apex:outputText>
+        </div>
+      </td>
+      <td class="prem-annual">
+        <div class="prem-label">Contract Period</div>
+        <div class="prem-amount" style="font-size:10pt;">
+          <apex:outputText value="{!effectiveDateFormatted}"/> – <apex:outputText value="{!endDateFormatted}"/>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- BENEFIT SCHEDULE — PER PLAN -->
+<apex:outputPanel rendered="{!hasLineItems}">
+<div class="section">
+  <div class="section-title">Schedule of Benefits</div>
+</div>
+
+<apex:repeat value="{!lineItems}" var="li">
+
+<div class="benefit-plan-header">
+  <apex:outputText value="{!li.Plan__r.Name}"/>
+  &nbsp;&bull;&nbsp;<apex:outputText value="{!li.Plan__r.Plan_Type__c}"/>
+  &nbsp;&bull;&nbsp;<apex:outputText value="{!li.Plan__r.Network__c}"/> Network
+</div>
+<div class="benefit-plan-sub">
+  Waiting Period: <strong><apex:outputText value="{!li.Plan__r.Waiting_Period__c}"/></strong>
+  &nbsp;&nbsp;&bull;&nbsp;&nbsp;
+  Ortho Coverage: <strong><apex:outputText value="{!IF(li.Plan__r.Ortho_Covered__c,'Included','Not Included')}"/></strong>
+</div>
+
+<table class="benefit-tbl">
+  <thead>
+    <tr>
+      <th style="width:40%">Benefit / Service Category</th>
+      <th class="ct" style="width:20%">In-Network</th>
+      <th class="ct" style="width:20%">Out-of-Network</th>
+      <th style="width:20%">Limitations &amp; Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="cat-header"><td colspan="4">DEDUCTIBLE (Calendar Year)</td></tr>
+    <tr class="deduct-row">
+      <td>Individual Deductible</td>
+      <td class="ct">$<apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Deductible_Individual__c}"/></apex:outputText></td>
+      <td class="ct">$<apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Deductible_Individual__c * 1.5}"/></apex:outputText></td>
+      <td><span class="note-text">Waived for Preventive services</span></td>
+    </tr>
+    <tr class="deduct-row">
+      <td>Family Deductible</td>
+      <td class="ct">$<apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Deductible_Family__c}"/></apex:outputText></td>
+      <td class="ct">$<apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Deductible_Family__c * 1.5}"/></apex:outputText></td>
+      <td><span class="note-text">Maximum 3 individual deductibles</span></td>
+    </tr>
+
+    <tr class="cat-header"><td colspan="4">ANNUAL MAXIMUM BENEFIT</td></tr>
+    <tr>
+      <td>Annual Maximum (per covered person)</td>
+      <td class="ct" colspan="2">
+        <apex:outputText value="{!IF(li.Plan__r.Annual_Maximum__c = null, 'Unlimited', '$' & TEXT(li.Plan__r.Annual_Maximum__c))}"/>
+      </td>
+      <td><span class="note-text">Per calendar year, per covered person</span></td>
+    </tr>
+
+    <tr class="cat-header"><td colspan="4">CLASS I — PREVENTIVE &amp; DIAGNOSTIC SERVICES</td></tr>
+    <tr>
+      <td>Oral Examinations</td>
+      <td class="ct"><span class="pct-in"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Preventive__c}"/></apex:outputText>%</span></td>
+      <td class="ct"><span class="pct-out"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Preventive__c * 0.8}"/></apex:outputText>%</span></td>
+      <td><span class="note-text">2 per calendar year; deductible waived</span></td>
+    </tr>
+    <tr>
+      <td>Routine Cleanings (Prophylaxis)</td>
+      <td class="ct"><span class="pct-in"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Preventive__c}"/></apex:outputText>%</span></td>
+      <td class="ct"><span class="pct-out"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Preventive__c * 0.8}"/></apex:outputText>%</span></td>
+      <td><span class="note-text">2 per calendar year; deductible waived</span></td>
+    </tr>
+    <tr>
+      <td>Dental X-Rays (Bitewing)</td>
+      <td class="ct"><span class="pct-in"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Preventive__c}"/></apex:outputText>%</span></td>
+      <td class="ct"><span class="pct-out"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Preventive__c * 0.8}"/></apex:outputText>%</span></td>
+      <td><span class="note-text">1 series per calendar year; deductible waived</span></td>
+    </tr>
+    <tr>
+      <td>Full Mouth / Panoramic X-Rays</td>
+      <td class="ct"><span class="pct-in"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Preventive__c}"/></apex:outputText>%</span></td>
+      <td class="ct"><span class="pct-out"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Preventive__c * 0.8}"/></apex:outputText>%</span></td>
+      <td><span class="note-text">1 per 5 calendar years; deductible waived</span></td>
+    </tr>
+    <tr>
+      <td>Fluoride Treatment</td>
+      <td class="ct"><span class="pct-in"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Preventive__c}"/></apex:outputText>%</span></td>
+      <td class="ct"><span class="pct-out"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Preventive__c * 0.8}"/></apex:outputText>%</span></td>
+      <td><span class="note-text">1 per calendar year through age 18; deductible waived</span></td>
+    </tr>
+    <tr>
+      <td>Sealants</td>
+      <td class="ct"><span class="pct-in"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Preventive__c}"/></apex:outputText>%</span></td>
+      <td class="ct"><span class="pct-out"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Preventive__c * 0.8}"/></apex:outputText>%</span></td>
+      <td><span class="note-text">Permanent molars only; through age 14; deductible waived</span></td>
+    </tr>
+
+    <tr class="cat-header"><td colspan="4">CLASS II — BASIC RESTORATIVE SERVICES</td></tr>
+    <tr>
+      <td>Amalgam Fillings (Silver)</td>
+      <td class="ct"><span class="pct-in"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Basic__c}"/></apex:outputText>%</span></td>
+      <td class="ct"><span class="pct-out"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Basic__c * 0.625}"/></apex:outputText>%</span></td>
+      <td><span class="note-text">After deductible</span></td>
+    </tr>
+    <tr>
+      <td>Composite Fillings (Tooth-Colored)</td>
+      <td class="ct"><span class="pct-in"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Basic__c}"/></apex:outputText>%</span></td>
+      <td class="ct"><span class="pct-out"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Basic__c * 0.625}"/></apex:outputText>%</span></td>
+      <td><span class="note-text">Posterior: paid at amalgam allowance; after deductible</span></td>
+    </tr>
+    <tr>
+      <td>Extractions &amp; Oral Surgery</td>
+      <td class="ct"><span class="pct-in"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Basic__c}"/></apex:outputText>%</span></td>
+      <td class="ct"><span class="pct-out"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Basic__c * 0.625}"/></apex:outputText>%</span></td>
+      <td><span class="note-text">Impacted teeth included; after deductible</span></td>
+    </tr>
+    <tr>
+      <td>Endodontics (Root Canals)</td>
+      <td class="ct"><span class="pct-in"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Basic__c}"/></apex:outputText>%</span></td>
+      <td class="ct"><span class="pct-out"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Basic__c * 0.625}"/></apex:outputText>%</span></td>
+      <td><span class="note-text">Molar root canal once per tooth per lifetime; after deductible</span></td>
+    </tr>
+    <tr>
+      <td>Periodontics (Gum Disease Treatment)</td>
+      <td class="ct"><span class="pct-in"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Basic__c}"/></apex:outputText>%</span></td>
+      <td class="ct"><span class="pct-out"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Basic__c * 0.625}"/></apex:outputText>%</span></td>
+      <td><span class="note-text">Scaling &amp; root planing once per quadrant per 24 months; after deductible</span></td>
+    </tr>
+
+    <tr class="cat-header"><td colspan="4">CLASS III — MAJOR RESTORATIVE SERVICES</td></tr>
+    <tr>
+      <td>Crowns (Cast Restorations)</td>
+      <td class="ct"><span class="pct-in"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Major__c}"/></apex:outputText>%</span></td>
+      <td class="ct"><span class="pct-out"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Major__c}"/></apex:outputText>%</span></td>
+      <td><span class="note-text">Once per tooth per 5 years; after deductible</span></td>
+    </tr>
+    <tr>
+      <td>Bridges (Fixed Partial Dentures)</td>
+      <td class="ct"><span class="pct-in"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Major__c}"/></apex:outputText>%</span></td>
+      <td class="ct"><span class="pct-out"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Major__c}"/></apex:outputText>%</span></td>
+      <td><span class="note-text">Once per missing tooth per 5 years; after deductible</span></td>
+    </tr>
+    <tr>
+      <td>Dentures (Full &amp; Partial)</td>
+      <td class="ct"><span class="pct-in"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Major__c}"/></apex:outputText>%</span></td>
+      <td class="ct"><span class="pct-out"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Major__c}"/></apex:outputText>%</span></td>
+      <td><span class="note-text">Once per 5 years; after deductible</span></td>
+    </tr>
+    <tr>
+      <td>Implants</td>
+      <td class="ct"><span class="pct-in"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Major__c}"/></apex:outputText>%</span></td>
+      <td class="ct"><span class="pct-out"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Major__c}"/></apex:outputText>%</span></td>
+      <td><span class="note-text">Covered in lieu of bridge/denture; after deductible</span></td>
+    </tr>
+
+    <apex:outputPanel layout="none" rendered="{!li.Plan__r.Ortho_Covered__c}">
+    <tr class="cat-header"><td colspan="4">CLASS IV — ORTHODONTIC SERVICES</td></tr>
+    <tr>
+      <td>Orthodontia (Braces / Aligners)</td>
+      <td class="ct"><span class="pct-in"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Ortho__c}"/></apex:outputText>%</span></td>
+      <td class="ct"><span class="pct-out"><apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Coinsurance_Ortho__c}"/></apex:outputText>%</span></td>
+      <td>
+        <span class="note-text">
+          Lifetime max: $<apex:outputText value="{0, number, #,##0}"><apex:param value="{!li.Plan__r.Ortho_Lifetime_Max__c}"/></apex:outputText>;
+          Adults &amp; children
+        </span>
+      </td>
+    </tr>
+    </apex:outputPanel>
+  </tbody>
+</table>
+
+<table class="rate-tbl" style="margin-top:10px;">
+  <thead>
+    <tr>
+      <th>Coverage Tier</th>
+      <th class="rt">Monthly Rate</th>
+      <th class="rt">Subscribers</th>
+      <th class="rt">Monthly Subtotal</th>
+      <th class="rt">Employer Cost</th>
+      <th class="rt">Employee Cost</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Employee Only (EO)</td>
+      <td class="rt">$<apex:outputText value="{0, number, #,##0.00}"><apex:param value="{!li.Rate_EO__c}"/></apex:outputText></td>
+      <td class="rt"><apex:outputText value="{!TEXT(li.Count_EO__c)}"/></td>
+      <td class="rt">$<apex:outputText value="{0, number, #,##0.00}"><apex:param value="{!li.Rate_EO__c * li.Count_EO__c}"/></apex:outputText></td>
+      <td class="rt emp-cost">$<apex:outputText value="{0, number, #,##0.00}"><apex:param value="{!li.Rate_EO__c * li.Count_EO__c * li.Employer_Contribution_Pct__c / 100}"/></apex:outputText></td>
+      <td class="rt">$<apex:outputText value="{0, number, #,##0.00}"><apex:param value="{!li.Rate_EO__c * li.Count_EO__c * (1 - li.Employer_Contribution_Pct__c / 100)}"/></apex:outputText></td>
+    </tr>
+    <tr>
+      <td>Employee + Spouse (ES)</td>
+      <td class="rt">$<apex:outputText value="{0, number, #,##0.00}"><apex:param value="{!li.Rate_ES__c}"/></apex:outputText></td>
+      <td class="rt"><apex:outputText value="{!TEXT(li.Count_ES__c)}"/></td>
+      <td class="rt">$<apex:outputText value="{0, number, #,##0.00}"><apex:param value="{!li.Rate_ES__c * li.Count_ES__c}"/></apex:outputText></td>
+      <td class="rt emp-cost">$<apex:outputText value="{0, number, #,##0.00}"><apex:param value="{!li.Rate_ES__c * li.Count_ES__c * li.Employer_Contribution_Pct__c / 100}"/></apex:outputText></td>
+      <td class="rt">$<apex:outputText value="{0, number, #,##0.00}"><apex:param value="{!li.Rate_ES__c * li.Count_ES__c * (1 - li.Employer_Contribution_Pct__c / 100)}"/></apex:outputText></td>
+    </tr>
+    <tr>
+      <td>Employee + Child(ren) (EC)</td>
+      <td class="rt">$<apex:outputText value="{0, number, #,##0.00}"><apex:param value="{!li.Rate_EC__c}"/></apex:outputText></td>
+      <td class="rt"><apex:outputText value="{!TEXT(li.Count_EC__c)}"/></td>
+      <td class="rt">$<apex:outputText value="{0, number, #,##0.00}"><apex:param value="{!li.Rate_EC__c * li.Count_EC__c}"/></apex:outputText></td>
+      <td class="rt emp-cost">$<apex:outputText value="{0, number, #,##0.00}"><apex:param value="{!li.Rate_EC__c * li.Count_EC__c * li.Employer_Contribution_Pct__c / 100}"/></apex:outputText></td>
+      <td class="rt">$<apex:outputText value="{0, number, #,##0.00}"><apex:param value="{!li.Rate_EC__c * li.Count_EC__c * (1 - li.Employer_Contribution_Pct__c / 100)}"/></apex:outputText></td>
+    </tr>
+    <tr>
+      <td>Employee + Family (EF)</td>
+      <td class="rt">$<apex:outputText value="{0, number, #,##0.00}"><apex:param value="{!li.Rate_EF__c}"/></apex:outputText></td>
+      <td class="rt"><apex:outputText value="{!TEXT(li.Count_EF__c)}"/></td>
+      <td class="rt">$<apex:outputText value="{0, number, #,##0.00}"><apex:param value="{!li.Rate_EF__c * li.Count_EF__c}"/></apex:outputText></td>
+      <td class="rt emp-cost">$<apex:outputText value="{0, number, #,##0.00}"><apex:param value="{!li.Rate_EF__c * li.Count_EF__c * li.Employer_Contribution_Pct__c / 100}"/></apex:outputText></td>
+      <td class="rt">$<apex:outputText value="{0, number, #,##0.00}"><apex:param value="{!li.Rate_EF__c * li.Count_EF__c * (1 - li.Employer_Contribution_Pct__c / 100)}"/></apex:outputText></td>
+    </tr>
+    <tr class="plan-total">
+      <td colspan="3"><strong>Plan Monthly Total</strong></td>
+      <td class="rt">$<apex:outputText value="{0, number, #,##0.00}"><apex:param value="{!li.Monthly_Subtotal__c}"/></apex:outputText></td>
+      <td class="rt emp-cost">$<apex:outputText value="{0, number, #,##0.00}"><apex:param value="{!li.Employer_Monthly_Cost__c}"/></apex:outputText></td>
+      <td class="rt">$<apex:outputText value="{0, number, #,##0.00}"><apex:param value="{!li.Employee_Monthly_Cost__c}"/></apex:outputText></td>
+    </tr>
+  </tbody>
+</table>
+
+</apex:repeat>
+</apex:outputPanel>
+
+<!-- GENERAL PROVISIONS -->
+<div class="section" style="margin-top:16px;">
+  <div class="section-title">General Provisions &amp; Limitations</div>
+  <div class="provisions-box">
+    <p><strong>Coverage Period:</strong> This contract provides dental benefits for the period beginning on the Coverage Start Date and ending on the Coverage End Date shown above, subject to timely premium payment.</p>
+    <p><strong>Eligibility:</strong> Coverage extends to all active eligible employees and their enrolled dependents. Newly eligible employees must enroll within 30 days of eligibility or during the annual open enrollment period.</p>
+    <p><strong>Dependent Coverage:</strong> Eligible dependents include legal spouse/domestic partner and unmarried dependent children through age 26.</p>
+    <p><strong>Waiting Periods:</strong> As specified per plan. New hires may be subject to an initial waiting period before benefits become effective.</p>
+    <p><strong>Network Providers:</strong> Services from Delta Dental PPO network providers result in lower out-of-pocket costs. Out-of-network services are covered at a reduced benefit level based on the Maximum Plan Allowance (MPA).</p>
+    <p><strong>Coordination of Benefits:</strong> If a covered person has other dental coverage, Delta Dental will coordinate benefits to avoid overpayment.</p>
+    <p><strong>Claims Filing:</strong> Claims must be submitted within 12 months of the date of service.</p>
+    <p><strong>Termination of Coverage:</strong> Coverage terminates on the last day of the month in which employment ends, unless COBRA or other continuation coverage rights apply.</p>
+    <p><strong>Exclusions:</strong> This contract does not cover: cosmetic procedures (unless resulting from accidental injury), experimental treatments, services covered under Workers' Compensation, or duplicate services within the stated frequency limitations.</p>
+  </div>
+</div>
+
+<!-- NOTES -->
+<apex:outputPanel rendered="{!NOT(ISBLANK(grp.Notes__c))}">
+<div class="section">
+  <div class="section-title">Notes</div>
+  <div class="notes-box"><apex:outputText value="{!grp.Notes__c}"/></div>
+</div>
+</apex:outputPanel>
+
+<!-- SIGNATURE BLOCK -->
+<div class="section" style="margin-top:16px;">
+  <div class="section-title">Acceptance &amp; Authorized Signatures</div>
+  <div class="provisions-box" style="margin-bottom:12px;">
+    <p>By signing below, the authorized representative of the Employer acknowledges that they have read, understand, and agree to the terms and conditions of this Group Dental Contract, including the Schedule of Benefits, premium amounts, and General Provisions stated herein.</p>
+  </div>
+  <table class="sig-table">
+    <tr>
+      <td style="width:45%;">
+        <div class="sig-line"></div>
+        <div class="sig-label">Authorized Signature — Employer / Policyholder</div>
+      </td>
+      <td style="width:10%;"></td>
+      <td style="width:45%;">
+        <div class="sig-line"></div>
+        <div class="sig-label">Printed Name &amp; Title</div>
+      </td>
+    </tr>
+    <tr style="height:20px;"></tr>
+    <tr>
+      <td>
+        <div class="sig-line"></div>
+        <div class="sig-label">Date Signed</div>
+      </td>
+      <td></td>
+      <td>
+        <div class="sig-line"></div>
+        <div class="sig-label">Delta Dental of California — Authorized Representative</div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-legal">
+    This Group Dental Contract is issued by Delta Dental of California, a nonprofit dental service plan corporation licensed under the California Knox-Keene Health Care Service Plan Act.
+    This document constitutes the entire agreement between Delta Dental of California and the Group.
+  </div>
+  <div class="footer-ref">
+    Group #<apex:outputText value="{!grp.Name}"/> &bull;
+    Generated <apex:outputText value="{!todayFormatted}"/> &bull;
+    Delta Dental of California &bull; CONFIDENTIAL
+  </div>
+</div>
+
+</body>
+</html>
+</apex:page>

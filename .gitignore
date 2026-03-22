@@ -1,0 +1,69 @@
+# ─── Salesforce DX ──────────────────────────────────────────────────────────
+.sfdx/
+.sf/
+.salesforcedx/
+
+# DX project auth files (never commit credentials)
+.sfdx/orgs/
+*.org-meta.xml
+
+# Scratch org definition can be committed but not scratch org credentials
+# config/project-scratch-def.json is safe to commit
+
+# ─── Metadata artifacts ─────────────────────────────────────────────────────
+# Compiled LWC
+**/lwc/**/__tests__/
+**/__mocks__/
+
+# Deploy/retrieve temp files
+deploy/
+retrieve/
+*.zip
+
+# ─── Node / npm ─────────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn/
+
+# ─── macOS ──────────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ─── IDEs ───────────────────────────────────────────────────────────────────
+.vscode/settings.json
+.vscode/launch.json
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# ─── Environment / secrets ──────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+server.key
+auth.json
+
+# ─── Logs ───────────────────────────────────────────────────────────────────
+logs/
+*.log
+
+# ─── Test results ───────────────────────────────────────────────────────────
+test-results/
+coverage/
+.nyc_output/
+junit.xml
+
+# ─── Destructive changes (keep template, not generated artifacts) ────────────
+destructiveChanges/*.xml
+!destructiveChanges/.gitkeep

@@ -1,0 +1,54 @@
+<template>
+    <div class="ddgm-container">
+        <div class="ddgm-header">
+            <h2>&#127968; Group Setup</h2>
+            <p>Complete group enrollment details for <strong>{employer.Name}</strong></p>
+        </div>
+
+        <div class="ddgm-body">
+            <template if:true={isLoading}>
+                <lightning-spinner size="medium" alternative-text="Loading..."></lightning-spinner>
+            </template>
+
+            <template if:false={isLoading}>
+                <div class="ddgm-grid">
+                    <div class="ddgm-field">
+                        <label class="ddgm-label ddgm-required">Group Name (Legal Name)</label>
+                        <input type="text" class="ddgm-input" value={group.Group_Name__c} data-field="Group_Name__c" onchange={handleFieldChange} />
+                    </div>
+                    <div class="ddgm-field">
+                        <label class="ddgm-label ddgm-required">Group Effective Date</label>
+                        <input type="date" class="ddgm-input" value={group.Effective_Date__c} data-field="Effective_Date__c" onchange={handleFieldChange} />
+                    </div>
+                    <div class="ddgm-field">
+                        <label class="ddgm-label">SIC Code</label>
+                        <input type="text" class="ddgm-input" value={group.SIC_Code__c} data-field="SIC_Code__c" onchange={handleFieldChange} maxlength="4" />
+                    </div>
+                    <div class="ddgm-field">
+                        <label class="ddgm-label">Billing Day</label>
+                        <input type="number" class="ddgm-input" value={group.Billing_Day__c} data-field="Billing_Day__c" onchange={handleFieldChange} min="1" max="28" />
+                        <span class="ddgm-hint">Day of month premium is due (1–28)</span>
+                    </div>
+                    <div class="ddgm-field">
+                        <label class="ddgm-label">Billing Method</label>
+                        <select class="ddgm-input ddgm-select" data-field="Billing_Method__c" onchange={handleFieldChange}>
+                            <option value="List Bill" selected={isListBill}>List Bill</option>
+                            <option value="Self Bill" selected={isSelfBill}>Self-Bill</option>
+                        </select>
+                    </div>
+                    <div class="ddgm-field">
+                        <label class="ddgm-label">Total Enrolled</label>
+                        <input type="number" class="ddgm-input" value={group.Total_Enrolled__c} data-field="Total_Enrolled__c" onchange={handleFieldChange} />
+                    </div>
+                </div>
+                <div class="ddgm-footer">
+                    <button class="ddgm-btn-secondary" onclick={handleCancel}>Cancel</button>
+                    <button class="ddgm-btn-primary" onclick={handleSave} disabled={isSaving}>
+                        <template if:false={isSaving}>Save Group</template>
+                        <template if:true={isSaving}>Saving...</template>
+                    </button>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

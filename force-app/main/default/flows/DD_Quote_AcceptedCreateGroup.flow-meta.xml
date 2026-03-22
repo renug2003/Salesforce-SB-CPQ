@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <description>Record-triggered flow. When a Quote Status changes to Accepted, automatically creates a DD_Group__c record linked to the Employer and the Quote, then updates the Quote Status to Converted.</description>
+    <environments>Default</environments>
+    <interviewLabel>DD Quote Accepted Create Group {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>DD Quote Accepted — Create Group</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value><stringValue>LightningFlowBuilder</stringValue></value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+
+    <!-- Trigger: After Save, Update only, when Status__c changes to Accepted -->
+    <start>
+        <locationX>176</locationX>
+        <locationY>48</locationY>
+        <connector>
+            <targetReference>Get_Employer</targetReference>
+        </connector>
+        <filterLogic>(1 OR 2) AND 3</filterLogic>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value><stringValue>Accepted</stringValue></value>
+        </filters>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value><stringValue>Approved</stringValue></value>
+        </filters>
+        <filters>
+            <field>Status__c</field>
+            <operator>IsChanged</operator>
+            <value><booleanValue>true</booleanValue></value>
+        </filters>
+        <object>DD_Quote__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+
+    <!-- Get Employer record for Group Name and SIC Code -->
+    <recordLookups>
+        <description>Fetch the Employer record to populate Group Name and SIC Code on the new Group</description>
+        <name>Get_Employer</name>
+        <label>Get Employer Details</label>
+        <locationX>176</locationX>
+        <locationY>200</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Existing_Group</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value><elementReference>$Record.Employer__c</elementReference></value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>DD_Employer__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+
+    <!-- Check whether a Group already exists for this Quote (prevent duplicates) -->
+    <recordLookups>
+        <description>Prevent duplicate Groups if the Quote is accidentally set to Accepted more than once</description>
+        <name>Check_Existing_Group</name>
+        <label>Check for Existing Group</label>
+        <locationX>176</locationX>
+        <locationY>360</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Group_Already_Exists</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Source_Quote__c</field>
+            <operator>EqualTo</operator>
+            <value><elementReference>$Record.Id</elementReference></value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>DD_Group__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+
+    <!-- Decision: Skip Group creation if one already exists -->
+    <decisions>
+        <description>Only create a new Group if none already exists for this Quote</description>
+        <name>Group_Already_Exists</name>
+        <label>Group Already Exists?</label>
+        <locationX>176</locationX>
+        <locationY>520</locationY>
+        <defaultConnector>
+            <targetReference>Create_Group</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No — Create Group</defaultConnectorLabel>
+        <rules>
+            <name>Group_Exists_Rule</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Check_Existing_Group</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue><booleanValue>false</booleanValue></rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Quote_Converted</targetReference>
+            </connector>
+            <label>Yes — Skip to Status Update</label>
+        </rules>
+    </decisions>
+
+    <!-- Create the Group record linked to Employer and Quote -->
+    <recordCreates>
+        <description>Create a DD_Group__c record with the Employer and accepted Quote as related records</description>
+        <name>Create_Group</name>
+        <label>Create Group Record</label>
+        <locationX>176</locationX>
+        <locationY>680</locationY>
+        <connector>
+            <targetReference>Update_Quote_Converted</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Employer__c</field>
+            <value><elementReference>$Record.Employer__c</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Source_Quote__c</field>
+            <value><elementReference>$Record.Id</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Group_Name__c</field>
+            <value><elementReference>Get_Employer.Name</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SIC_Code__c</field>
+            <value><elementReference>Get_Employer.SIC_Code__c</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Effective_Date__c</field>
+            <value><elementReference>$Record.Effective_Date__c</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Renewal_Date__c</field>
+            <value><elementReference>varRenewalDate</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Total_Enrolled__c</field>
+            <value><elementReference>$Record.Employee_Count__c</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value><stringValue>Pending</stringValue></value>
+        </inputAssignments>
+        <object>DD_Group__c</object>
+    </recordCreates>
+
+    <!-- Update Quote Status to Converted -->
+    <recordUpdates>
+        <description>Mark the Quote as Converted to Group so it cannot be re-processed</description>
+        <name>Update_Quote_Converted</name>
+        <label>Set Quote Status to Converted</label>
+        <locationX>176</locationX>
+        <locationY>840</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value><elementReference>$Record.Id</elementReference></value>
+        </filters>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value><stringValue>Converted</stringValue></value>
+        </inputAssignments>
+        <object>DD_Quote__c</object>
+    </recordUpdates>
+
+    <!-- Formula: Renewal Date = Effective Date + 1 year -->
+    <formulas>
+        <name>varRenewalDate</name>
+        <dataType>Date</dataType>
+        <expression>DATE(YEAR({!$Record.Effective_Date__c}) + 1, MONTH({!$Record.Effective_Date__c}), DAY({!$Record.Effective_Date__c}))</expression>
+    </formulas>
+
+</Flow>

@@ -1,0 +1,16 @@
+<template>
+    <div class="ddpdf-container">
+        <template if:true={isGenerating}>
+            <div class="ddpdf-generating">
+                <lightning-spinner size="medium" alternative-text="Generating PDF..."></lightning-spinner>
+                <p>Generating proposal PDF...</p>
+            </div>
+        </template>
+        <!-- Hidden proposal viewer used for PDF rendering -->
+        <div class="ddpdf-hidden-viewer" lwc:ref="pdfContent">
+            <template if:true={proposalData}>
+                <c-dd-proposal-viewer proposal-data={proposalData}></c-dd-proposal-viewer>
+            </template>
+        </div>
+    </div>
+</template>

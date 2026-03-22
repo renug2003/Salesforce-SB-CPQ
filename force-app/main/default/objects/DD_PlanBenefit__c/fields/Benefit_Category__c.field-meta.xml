@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Benefit_Category__c</fullName>
+    <inlineHelpText>Category grouping for this benefit</inlineHelpText>
+    <label>Benefit Category</label>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Preventive</fullName>
+                <default>false</default>
+                <label>Preventive &amp; Diagnostic</label>
+            </value>
+            <value>
+                <fullName>Basic</fullName>
+                <default>false</default>
+                <label>Basic Services</label>
+            </value>
+            <value>
+                <fullName>Major</fullName>
+                <default>false</default>
+                <label>Major Services</label>
+            </value>
+            <value>
+                <fullName>Orthodontia</fullName>
+                <default>false</default>
+                <label>Orthodontia</label>
+            </value>
+            <value>
+                <fullName>Vision</fullName>
+                <default>false</default>
+                <label>Vision</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

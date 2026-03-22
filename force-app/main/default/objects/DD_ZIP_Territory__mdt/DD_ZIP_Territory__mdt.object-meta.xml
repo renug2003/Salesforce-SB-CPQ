@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>ZIP Territory Mapping</label>
+    <pluralLabel>ZIP Territory Mappings</pluralLabel>
+    <fields>
+        <fullName>ZIP_Code__c</fullName>
+        <fieldManageability>DeveloperControlled</fieldManageability>
+        <label>ZIP Code</label>
+        <type>Text</type>
+        <length>5</length>
+        <inlineHelpText>5-digit California ZIP code</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Rate_Territory__c</fullName>
+        <fieldManageability>DeveloperControlled</fieldManageability>
+        <label>Rate Territory</label>
+        <type>Text</type>
+        <length>20</length>
+        <inlineHelpText>Rate territory code used for premium lookup</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>County__c</fullName>
+        <fieldManageability>DeveloperControlled</fieldManageability>
+        <label>County</label>
+        <type>Text</type>
+        <length>100</length>
+        <inlineHelpText>California county name</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Region__c</fullName>
+        <fieldManageability>DeveloperControlled</fieldManageability>
+        <label>Region</label>
+        <type>Text</type>
+        <length>50</length>
+        <inlineHelpText>Broad geographic region (Northern CA, Southern CA, etc.)</inlineHelpText>
+    </fields>
+</CustomObject>

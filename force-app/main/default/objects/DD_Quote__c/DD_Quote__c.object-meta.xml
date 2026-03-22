@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>New</actionName>
+        <comment>Override standard New with the guided quote wizard</comment>
+        <content>ddNewQuoteAction</content>
+        <formFactor>Large</formFactor>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>LightningComponent</type>
+    </actionOverrides>
+    <label>Quote</label>
+    <pluralLabel>Quotes</pluralLabel>
+    <nameField>
+        <label>Quote Number</label>
+        <type>AutoNumber</type>
+        <startingNumber>1</startingNumber>
+        <displayFormat>QT-{000000}</displayFormat>
+    </nameField>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <sharingModel>ReadWrite</sharingModel>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Employer__c</fullName>
+        <label>Employer</label>
+        <type>Lookup</type>
+        <referenceTo>DD_Employer__c</referenceTo>
+        <relationshipLabel>Quotes</relationshipLabel>
+        <relationshipName>Quotes</relationshipName>
+        <deleteConstraint>Restrict</deleteConstraint>
+        <required>true</required>
+        <trackHistory>true</trackHistory>
+        <inlineHelpText>Employer this quote is for</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Broker__c</fullName>
+        <label>Broker/Agent</label>
+        <type>Lookup</type>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Broker Quotes</relationshipLabel>
+        <relationshipName>Broker_Quotes</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Broker or agent associated with this quote</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Broker_Account__c</fullName>
+        <label>Broker Account</label>
+        <type>Lookup</type>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Broker Quotes</relationshipLabel>
+        <relationshipName>Broker_Account_Quotes</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Broker or agency account (Type = Producer) associated with this quote</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Effective_Date__c</fullName>
+        <label>Requested Effective Date</label>
+        <type>Date</type>
+        <required>true</required>
+        <trackHistory>true</trackHistory>
+        <inlineHelpText>Requested coverage start date</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Quote_Expiration_Date__c</fullName>
+        <label>Quote Expiration Date</label>
+        <type>Date</type>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Date after which this quote is no longer valid (auto-set to 30 days from creation)</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <label>Status</label>
+        <type>Picklist</type>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <inlineHelpText>Current status of the quote</inlineHelpText>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value><fullName>Draft</fullName><label>Draft</label><default>true</default></value>
+                <value><fullName>Presented</fullName><label>Presented</label><default>false</default></value>
+                <value><fullName>Accepted</fullName><label>Accepted</label><default>false</default></value>
+                <value><fullName>Approved</fullName><label>Approved</label><default>false</default></value>
+                <value><fullName>Declined</fullName><label>Declined</label><default>false</default></value>
+                <value><fullName>Expired</fullName><label>Expired</label><default>false</default></value>
+                <value><fullName>Converted</fullName><label>Converted to Group</label><default>false</default></value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Quote_Type__c</fullName>
+        <label>Quote Type</label>
+        <type>Picklist</type>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Whether this is a new business quote, renewal, or add-a-line</inlineHelpText>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value><fullName>New Business</fullName><label>New Business</label><default>true</default></value>
+                <value><fullName>Renewal</fullName><label>Renewal</label><default>false</default></value>
+                <value><fullName>Add-a-Line</fullName><label>Add-a-Line</label><default>false</default></value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Total_Monthly_Premium__c</fullName>
+        <label>Total Monthly Premium</label>
+        <type>Currency</type>
+        <precision>12</precision>
+        <scale>2</scale>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Sum of all selected plan monthly premiums</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Total_Annual_Premium__c</fullName>
+        <label>Total Annual Premium</label>
+        <type>Currency</type>
+        <formula>Total_Monthly_Premium__c * 12</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <precision>12</precision>
+        <scale>2</scale>
+        <inlineHelpText>Annual premium (monthly × 12)</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Employee_Count__c</fullName>
+        <label>Employee Count</label>
+        <type>Number</type>
+        <precision>3</precision>
+        <scale>0</scale>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Number of employees being quoted</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>ZIP_Code__c</fullName>
+        <label>ZIP Code</label>
+        <type>Text</type>
+        <length>5</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>ZIP code used for rate territory lookup</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Rate_Territory__c</fullName>
+        <label>Rate Territory</label>
+        <type>Text</type>
+        <length>20</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Rate territory derived from ZIP code</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Notes__c</fullName>
+        <label>Notes</label>
+        <type>LongTextArea</type>
+        <length>32768</length>
+        <visibleLines>5</visibleLines>
+        <required>false</required>
+        <inlineHelpText>Internal notes about this quote</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>PDF_Generated__c</fullName>
+        <label>PDF Generated</label>
+        <type>Checkbox</type>
+        <defaultValue>false</defaultValue>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Indicates a proposal PDF has been generated from this quote</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Employer_Monthly_Total__c</fullName>
+        <label>Employer Monthly Total</label>
+        <type>Currency</type>
+        <precision>12</precision>
+        <scale>2</scale>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Total monthly employer contribution across all plans</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Employee_Monthly_Total__c</fullName>
+        <label>Employee Monthly Total</label>
+        <type>Currency</type>
+        <precision>12</precision>
+        <scale>2</scale>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Total monthly employee contribution across all plans</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>Plans_Selected__c</fullName>
+        <label>Plans Selected</label>
+        <type>Text</type>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <inlineHelpText>Summary of selected plan names</inlineHelpText>
+    </fields>
+    <searchLayouts>
+<searchResultsAdditionalFields>Employer__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Status__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Effective_Date__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Total_Monthly_Premium__c</searchResultsAdditionalFields>
+    </searchLayouts>
+</CustomObject>
